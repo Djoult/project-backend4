@@ -1,2 +1,2 @@
-export { default as contactsRouter } from "./contacts.js";
-export { default as usersRouter } from "./users.js";
+export { default as authRouter } from "./auth.js";
+export { default as recipesRouter } from "./recipes.js";
