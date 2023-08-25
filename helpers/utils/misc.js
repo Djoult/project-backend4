@@ -1,5 +1,9 @@
 import Joi from 'joi';
 
+export const isStr = v => typeof v === 'string';
+export const isFunc = v => typeof v === 'function';
+export const isNum = v => !isNaN(v - parseFloat(v));
+
 export const isNonEmptyArray = v => {
   return Array.isArray(v) && v.length;
 };
