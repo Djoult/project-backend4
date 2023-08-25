@@ -1,14 +1,14 @@
-import { Schema, model } from "mongoose";
-import { handleSaveError, handleUpdateValidate } from "../hooks/index.js";
+import { Schema, model } from 'mongoose';
+import { mongooseSchema as schema } from '../schemas/users/index.js';
+import * as hook from './hooks.js';
 
-const userSchema = new Schema({}, { versionKey: false, timestamps: true });
+// валидация при обновлении
+schema.pre('findOneAndUpdate', hook.handlePreUpdateValidate);
 
-userSchema.pre("findOneAndUpdate", handleUpdateValidate);
+// обработка ошибок при обновлении и добавлении
+schema.post('findOneAndUpdate', hook.handlePostSaveError);
+schema.post('save', hook.handlePostSaveError);
 
-userSchema.post("save", handleSaveError);
-
-userSchema.post("findOneAndUpdate", handleSaveError);
-
-const User = model("user", userSchema);
+export const User = model('user', schema);
 
 export default User;
