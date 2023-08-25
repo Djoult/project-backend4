@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { mongooseSchema as schema } from '../schemas/recipes/index.js';
-import { hook } from './hooks.js';
+import * as hook from './hooks.js';
 
 // валидация при обновлении
 schema.pre('findOneAndUpdate', hook.handlePreUpdateValidate);

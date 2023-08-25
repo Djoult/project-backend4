@@ -3,7 +3,7 @@ import { db } from '../helpers/index.js';
 
 const ERR_CODE_DUPLICATE_KEY = 11000;
 
-const handlePostSaveError = function (err, doc, next) {
+export const handlePostSaveError = function (err, doc, next) {
   switch (err.name) {
     case 'ValidationError':
       const { reason } = db.parseValidationErrorMessage(err.message);
@@ -21,12 +21,7 @@ const handlePostSaveError = function (err, doc, next) {
   next();
 };
 
-const handlePreUpdateValidate = function (next) {
+export const handlePreUpdateValidate = function (next) {
   this.options.runValidators = true;
   next();
-};
-
-export const hook = {
-  handlePostSaveError,
-  handlePreUpdateValidate,
 };
