@@ -9,7 +9,7 @@ import {
   categoryList,
   glassList,
   reservedFields,
-  validationData,
+  validationMap,
 } from '../../constants/index.js';
 
 //
@@ -17,17 +17,17 @@ import {
 //
 
 const {
-  drink: title,
-  aboutRecipe: about,
+  title: titleData,
+  aboutRecipe,
   instructions,
   drinkThumb,
-} = validationData;
+} = validationMap;
 
-const titleValidator = {
+const title = {
   type: String,
   required: true,
-  match: [title.pattern, title.message],
-  maxLength: title.maxLen,
+  match: [titleData.pattern, titleData.message],
+  maxLength: titleData.max,
 };
 
 //
@@ -35,12 +35,12 @@ const titleValidator = {
 //
 
 const shape = {
-  drink: titleValidator,
+  drink: title,
 
   aboutRecipe: {
     type: String,
-    match: [about.pattern, about.message],
-    maxLength: about.maxLen,
+    match: [aboutRecipe.pattern, aboutRecipe.message],
+    maxLength: aboutRecipe.max,
     default: null,
   },
 
@@ -68,7 +68,7 @@ const shape = {
     type: String,
     required: true,
     match: [instructions.pattern, instructions.message],
-    maxLength: instructions.maxLen,
+    maxLength: instructions.max,
   },
 
   drinkThumb: {
@@ -79,6 +79,12 @@ const shape = {
 
   ingridients: {
     type: Array,
+  },
+
+  owner: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'user',
   },
 };
 

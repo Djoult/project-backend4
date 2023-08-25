@@ -9,7 +9,7 @@ import {
   categoryList,
   glassList,
   reservedFields,
-  validationData,
+  validationMap,
 } from '../../constants/index.js';
 
 //
@@ -17,74 +17,64 @@ import {
 //
 
 const {
-  drink: title,
-  aboutRecipe: about,
-  measure,
+  title: titleData,
+  aboutRecipe,
   instructions,
   drinkThumb,
-} = validationData;
+  ingredients,
+  measure,
+} = validationMap;
 
-const titleValidator = Joi.string()
-  .pattern(title.pattern)
-  .messages({
-    'string.pattern.base': `{{#label}}: ${title.message}`,
-  })
-  .max(title.maxLen)
-  .required();
+const title = Joi.string()
+  .required()
+  .pattern(titleData.pattern)
+  .max(titleData.max)
+  .messages({ '*': `{{#label}}: ${titleData.message}` });
 
 //
 // doc shape
 //
 
 const shape = {
-  drink: titleValidator,
+  drink: title,
 
   aboutRecipe: Joi.string()
-    .pattern(about.pattern)
-    .messages({
-      'string.pattern.base': `{{#label}}: ${about.message}`,
-    })
-    .max(about.maxLen)
-    .default(null),
+    .pattern(aboutRecipe.pattern)
+    .max(aboutRecipe.max)
+    .default(null)
+    .messages({ '*': `{{#label}}: ${aboutRecipe.message}` }),
 
   category: Joi.string()
+    .required()
     .lowercase()
     .valid(...categoryList)
-    .messages({ 'any.only': `{{#label}}: Invalid value` })
-    .required(),
+    .messages({ '*': `{{#label}}: Unknown value` }),
 
   glass: Joi.string()
+    .required()
     .lowercase()
     .valid(...glassList)
-    .messages({ 'any.only': `{{#label}}: Invalid value` })
-    .required(),
+    .messages({ '*': `{{#label}}: Unknown value` }),
 
   instructions: Joi.string()
+    .required()
     .pattern(instructions.pattern)
+    .max(instructions.max)
     .messages({
-      'string.pattern.base': `{{#label}}: ${instructions.message}`,
-    })
-    .max(instructions.maxLen)
-    .required(),
-
-  // drinkThumb: Joi.string()
-  //   .pattern(drinkThumb.pattern)
-  //   .messages({
-  //     'string.pattern.base': `{{#label}}: ${drinkThumb.message}`,
-  //   }),
+      '*': `{{#label}}: ${instructions.message}`,
+    }),
 
   ingredients: Joi.array()
+    .required()
     .items({
-      title: titleValidator,
+      title,
       measure: Joi.string()
+        .required()
         .pattern(measure.pattern)
-        .messages({
-          'string.pattern.base': `{{#label}}: ${measure.message}`,
-        })
-        .min(measure.minLen)
-        .required(),
+        .min(measure.min)
+        .messages({ '*': `{{#label}}: ${measure.message}` }),
     })
-    .required(),
+    .messages({ '*': `{{#label}}: ${ingredients.message}` }),
 };
 
 // добавляем trim() всем текстовым полям
@@ -99,11 +89,12 @@ export const schema = {
 
 // console.log(
 //   schema.addRecipe.validate({
-//     drink: 'sf7',
-//     category: 'Shake',
+//     drink: 'sfwqw',
+//     category: 'shake',
 //     glass: 'jar',
 //     instructions: 'seqewqewqeewqeqweqweqweqs',
 //     alcoholic: true,
 //     video: null,
-//   }).error?.details
+//     ingredients: [{ title: 'swq', measure: '2cl' }],
+//   }).error?.details[0].message
 // );
