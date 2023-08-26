@@ -77,7 +77,7 @@ const userFields = {
       'start with a capital',
       'and be at least 2 characters long',
     ].join(' '),
-    normalizer: v => v.replace(/\s+/, ' '),
+    normalizer: v => v.replaceAll(/\s+/, ' '),
   },
 
   email: {

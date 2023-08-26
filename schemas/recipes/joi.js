@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { isValidObjectId } from 'mongoose';
 
 import {
   setJoiShapeTrimAll,
@@ -38,7 +39,7 @@ const title = Joi.string()
 const shape = {
   drink: title,
 
-  aboutRecipe: Joi.string()
+  about: Joi.string()
     .pattern(aboutRecipe.pattern)
     .max(aboutRecipe.max)
     .default(null)
@@ -67,14 +68,29 @@ const shape = {
   ingredients: Joi.array()
     .required()
     .items({
-      title,
+      //title,
+      ingredientId: Joi.string()
+        .required()
+        .custom((v, helper) => {
+          if (!isValidObjectId(v))
+            return helper.message(`{{#label}}: Invalid id`);
+        }),
+
       measure: Joi.string()
         .required()
         .pattern(measure.pattern)
         .min(measure.min)
         .messages({ '*': `{{#label}}: ${measure.message}` }),
-    })
-    .messages({ '*': `{{#label}}: ${ingredients.message}` }),
+    }),
+  // .error(errors => {
+  //   errors.forEach(err => {
+  //     console.log(err.code);
+  //     switch (err.code) {
+  //     }
+  //   });
+  //   return errors;
+  // }),
+  //.messages({ '*': `{{#label}}: ${ingredients.message}` }),
 };
 
 // добавляем trim() всем текстовым полям

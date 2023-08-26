@@ -48,10 +48,10 @@ export const glassList = [
 ].map(itm => itm.toLocaleLowerCase());
 
 // поля, которые потенциально могут прийти в теле запроса
-export const reservedFields = [
-  'drinkAlternate',
-  'tags',
-  'video',
-  'IBA',
-  'alcoholic',
-];
+export const reservedFields = {
+  drinkAlternate: 'String',
+  tags: 'String',
+  video: 'String',
+  IBA: 'String',
+  alcoholic: 'Boolean',
+};

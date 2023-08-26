@@ -1,5 +1,6 @@
+import { Schema } from 'mongoose';
 import { validationMap } from '../../constants/index.js';
-import { setMongooseShapeTrimAll } from '../../helpers/index.js';
+import { setMongooseShapeNormalizeAll } from '../../helpers/index.js';
 
 const { name, email, password } = validationMap;
 
@@ -35,6 +36,7 @@ const shape = {
 
   avatarUrl: {
     type: String,
+    default: null,
   },
 
   verified: {
@@ -49,7 +51,7 @@ const shape = {
 };
 
 // добавляем trim всем строковым полям
-setMongooseShapeTrimAll(shape);
+setMongooseShapeNormalizeAll(shape);
 
 // убираем автодобавление поля с номером версии,
 // инициируем автодобавление даты создания/обновления

@@ -1,7 +1,8 @@
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import { mongooseSchema as ingredientSchema } from '../ingredients/index.js';
 
 import {
-  setMongooseShapeTrimAll,
+  setMongooseShapeNormalizeAll,
   setMongooseShapeReserved,
 } from '../../helpers/index.js';
 
@@ -16,8 +17,11 @@ import {
 // constants
 //
 
+const { ObjectId } = Schema.Types;
+
 const {
   title: titleData,
+  measure,
   aboutRecipe,
   instructions,
   drinkThumb,
@@ -30,6 +34,11 @@ const title = {
   maxLength: titleData.max,
 };
 
+const userRef = {
+  type: ObjectId,
+  ref: 'user',
+};
+
 //
 // doc shape
 //
@@ -37,7 +46,7 @@ const title = {
 const shape = {
   drink: title,
 
-  aboutRecipe: {
+  about: {
     type: String,
     match: [aboutRecipe.pattern, aboutRecipe.message],
     maxLength: aboutRecipe.max,
@@ -77,28 +86,32 @@ const shape = {
     default: null,
   },
 
-  ingridients: {
-    type: Array,
+  ingredients: {
+    type: [ingredientSchema],
+    required: true,
   },
 
-  owner: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: 'user',
+  // массив id тех, кто добавил рецепт в favorites
+  users: {
+    type: [userRef],
+    default: [],
   },
+
+  // owner: {
+  //   ...userRef,
+  //   required: true,
+  // },
 };
 
 // добавляем { trim: true } всем текстовым полям
-setMongooseShapeTrimAll(shape);
+setMongooseShapeNormalizeAll(shape);
 
 // ставим зарезервированные поля в null
-setMongooseShapeReserved(shape);
+//setMongooseShapeReserved(shape, reservedFields);
 
-// убираем автодобавление поля с номером версии,
-// инициируем автодобавление даты создания/обновления
-const options = {
+const schemaOptions = {
   versionKey: false,
   timestamps: true,
 };
 
-export const schema = new Schema(shape, options);
+export const schema = new Schema(shape, schemaOptions);

@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose';
+import './ingredient.js';
+import { model } from 'mongoose';
 import { mongooseSchema as schema } from '../schemas/recipes/index.js';
 import * as hook from './hooks.js';
 
@@ -12,5 +13,3 @@ schema.post('save', hook.handlePostSaveError);
 export const Recipe = model('recipe', schema);
 
 export default Recipe;
-
-// Recipe.create({});

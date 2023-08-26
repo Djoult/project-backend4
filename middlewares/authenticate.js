@@ -16,5 +16,3 @@ export const authenticate = async (req, res, next) => {
 
   throw HttpError(HTTP_STATUS.unauth);
 };
-
-export default authenticate;
