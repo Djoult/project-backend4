@@ -1,4 +1,6 @@
 import express from 'express';
+import swaggerUi from "swagger-ui-express";
+// import swaggerDocument from "./swagger.json" assert { type: "json" };
 import logger from 'morgan';
 import cors from 'cors';
 import 'dotenv/config';
@@ -8,6 +10,11 @@ import {
   subscriptionRouter,
 } from './routes/api/index.js';
 import bodyParser from 'body-parser';
+
+import { readFile } from 'fs/promises';
+const swaggerDocument = JSON.parse(
+  await readFile(new URL('./swagger.json', import.meta.url))
+);
 
 const app = express();
 
@@ -22,6 +29,11 @@ app.use(bodyParser.json()); // Розпарсуємо JSON дані з тіла 
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
 app.use('/api/subscription', subscriptionRouter); //роут на підписку
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
