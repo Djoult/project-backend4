@@ -1,4 +1,5 @@
 import { validationMap } from '../../constants/index.js';
+import { Schema } from 'mongoose';
 import { setMongooseShapeTrimAll } from '../../helpers/index.js';
 
 const { name, email, password } = validationMap;
