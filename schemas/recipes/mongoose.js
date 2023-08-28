@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { mongooseSchema as ingredientSchema } from '../ingredients/index.js';
 
 import {
@@ -13,19 +13,19 @@ import {
   validationMap,
 } from '../../constants/index.js';
 
-//
-// constants
-//
-
 const { ObjectId } = Schema.Types;
 
 const {
   title: titleData,
+  thumb,
   measure,
   aboutRecipe,
   instructions,
-  drinkThumb,
 } = validationMap;
+
+//
+// helpers
+//
 
 const title = {
   type: String,
@@ -58,7 +58,7 @@ const shape = {
     required: true,
     lowercase: true,
     enum: {
-      values: categoryList,
+      values: categoryList.map(itm => itm.toLocaleLowerCase()),
       message: 'Invalid value',
     },
   },
@@ -68,7 +68,7 @@ const shape = {
     required: true,
     lowercase: true,
     enum: {
-      values: glassList,
+      values: glassList.map(itm => itm.toLocaleLowerCase()),
       message: 'Invalid value',
     },
   },
@@ -82,7 +82,7 @@ const shape = {
 
   drinkThumb: {
     type: String,
-    match: [drinkThumb.pattern, drinkThumb.message],
+    match: [thumb.pattern, thumb.message],
     default: null,
   },
 
@@ -107,7 +107,7 @@ const shape = {
 setMongooseShapeNormalizeAll(shape);
 
 // ставим зарезервированные поля в null
-//setMongooseShapeReserved(shape, reservedFields);
+setMongooseShapeReserved(shape, reservedFields);
 
 const schemaOptions = {
   versionKey: false,

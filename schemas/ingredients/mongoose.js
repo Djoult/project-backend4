@@ -1,26 +1,24 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { validationMap } from '../../constants/index.js';
 
-const { measure } = validationMap;
+const { title: titleData, measure } = validationMap;
 
-export const schema = new Schema(
-  {
-    _id: false,
+const shape = {
+  _id: false,
 
-    ingredientId: {
-      type: Schema.Types.ObjectId,
-      ref: 'ingredient',
-      required: true,
-    },
-
-    measure: {
-      type: String,
-      required: true,
-      minLength: measure.min,
-      match: [measure.pattern, measure.message],
-    },
+  title: {
+    type: String,
+    required: true,
+    match: [titleData.pattern, titleData.message],
+    maxLength: titleData.max,
   },
-  {
-    versionKey: false,
-  }
-);
+
+  measure: {
+    type: String,
+    required: true,
+    minLength: measure.min,
+    match: [measure.pattern, measure.message],
+  },
+};
+
+export const schema = new Schema(shape, { versionKey: false });

@@ -4,7 +4,7 @@ import app from './app.js';
 import { db } from './helpers/index.js';
 
 const { PORT } = process.env;
-const DB_NAME = 'db-drinks-test';
+const DB_NAME = 'db-drinks';
 const blue = chalk.blueBright;
 const red = chalk.red;
 

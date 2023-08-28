@@ -19,6 +19,7 @@ import {
 
 const {
   title: titleData,
+  thumb: thumbData,
   aboutRecipe,
   instructions,
   drinkThumb,
@@ -31,6 +32,11 @@ const title = Joi.string()
   .pattern(titleData.pattern)
   .max(titleData.max)
   .messages({ '*': `{{#label}}: ${titleData.message}` });
+
+// const thumb = Joi.string()
+//   .required()
+//   .pattern(thumbData.pattern)
+//   .messages({ '*': `{{#label}}: ${thumbData.message}` });
 
 //
 // doc shape
@@ -48,13 +54,13 @@ const shape = {
   category: Joi.string()
     .required()
     .lowercase()
-    .valid(...categoryList)
+    .valid(...categoryList.map(itm => itm.toLocaleLowerCase()))
     .messages({ '*': `{{#label}}: Unknown value` }),
 
   glass: Joi.string()
     .required()
     .lowercase()
-    .valid(...glassList)
+    .valid(...glassList.map(itm => itm.toLocaleLowerCase()))
     .messages({ '*': `{{#label}}: Unknown value` }),
 
   instructions: Joi.string()
@@ -68,29 +74,13 @@ const shape = {
   ingredients: Joi.array()
     .required()
     .items({
-      //title,
-      ingredientId: Joi.string()
-        .required()
-        .custom((v, helper) => {
-          if (!isValidObjectId(v))
-            return helper.message(`{{#label}}: Invalid id`);
-        }),
-
+      title,
       measure: Joi.string()
         .required()
         .pattern(measure.pattern)
         .min(measure.min)
         .messages({ '*': `{{#label}}: ${measure.message}` }),
     }),
-  // .error(errors => {
-  //   errors.forEach(err => {
-  //     console.log(err.code);
-  //     switch (err.code) {
-  //     }
-  //   });
-  //   return errors;
-  // }),
-  //.messages({ '*': `{{#label}}: ${ingredients.message}` }),
 };
 
 // добавляем trim() всем текстовым полям
@@ -102,15 +92,3 @@ setJoiShapeReserved(shape, reservedFields);
 export const schema = {
   addRecipe: Joi.object(shape),
 };
-
-// console.log(
-//   schema.addRecipe.validate({
-//     drink: 'sfwqw',
-//     category: 'shake',
-//     glass: 'jar',
-//     instructions: 'seqewqewqeewqeqweqweqweqs',
-//     alcoholic: true,
-//     video: null,
-//     ingredients: [{ title: 'swq', measure: '2cl' }],
-//   }).error?.details[0].message
-// );

@@ -36,8 +36,13 @@ const parseDupKeyErrorMessage = errOrMsg => {
   };
 };
 
+const makeObjectId = s => {
+  return new mongoose.Types.ObjectId(s);
+};
+
 export const db = {
   connect,
   parseDupKeyErrorMessage,
   parseValidationErrorMessage,
+  makeObjectId,
 };

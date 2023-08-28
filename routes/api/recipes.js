@@ -6,10 +6,17 @@ import { ctrl } from '../../controllers/recipes/index.js';
 
 export const router = express.Router();
 
-// router.use('/:id', isValidId);
+// router.use(':id', isValidId);
 
 // добавление рецепта
 router.post('/own', isEmptyBody, validateBody(schema.addRecipe), ctrl.add);
 
+// список всех категорий
+router.get('/category-list', ctrl.getCategoryList);
+
+// посик по названию, категории и ингредиенту
+// recipes/search?drink=...&category=...&ingredient=...
+router.get('/search', ctrl.search);
+
 // получение одного рецепта по id
-router.get('/own/:id', isValidId, ctrl.getById);
+router.get('/:id', isValidId, ctrl.getById);

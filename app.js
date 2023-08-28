@@ -3,7 +3,7 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import chalk from 'chalk';
-import { authRouter, recipesRouter } from './routes/api/index.js';
+import { authRouter, recipesRouter, miscRouter } from './routes/api/index.js';
 
 const app = express();
 
@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+app.use('/api', miscRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
 

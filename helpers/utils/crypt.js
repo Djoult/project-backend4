@@ -3,7 +3,8 @@ import jwtoken from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
-const { JWT_SECRET_KEY, JWT_EXPIRES_IN = '30d', HASH_SALT = 10 } = process.env;
+const { JWT_SECRET_KEY, JWT_EXPIRES_IN = '30d' } = process.env;
+const HASH_SALT = 10;
 
 export const jwt = {
   create(id, expiresIn = JWT_EXPIRES_IN) {
@@ -13,8 +14,7 @@ export const jwt = {
     try {
       return jwtoken.verify(token, key);
     } catch {
-      // false вместо null,
-      // чтобы работало const { id } = verify(..)
+      // false, чтобы работало const { id } = verify(..)
       return false;
     }
   },

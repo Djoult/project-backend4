@@ -7,5 +7,6 @@ export const add = async ({ body, user }, res) => {
   const owner = null;
 
   const result = await Recipe.create({ ...body, owner });
+
   res.status(HTTP_STATUS.created).json(result);
 };

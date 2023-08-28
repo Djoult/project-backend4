@@ -1,10 +1,24 @@
-import { HttpError } from '../../helpers/index.js';
 import { HTTP_STATUS } from '../../constants/index.js';
 import { Recipe } from '../../models/index.js';
 
-export const getById = async ({ params: { id } }, res) => {
-  const result = await Recipe.findById(id).populate('ingredients.ingredientId');
-  if (!result) throw HttpError(HTTP_STATUS.notFound);
+import {
+  db,
+  HttpError,
+  getRecipeIngredientsAggrPipeline,
+} from '../../helpers/index.js';
 
+export const getById = async ({ params: { id } }, res) => {
+  const pipeline = getRecipeIngredientsAggrPipeline();
+
+  // добавляем в коныеер соотвествие заданному id
+  const result = await Recipe.aggregate([
+    {
+      $match: {
+        _id: db.makeObjectId(id),
+      },
+    },
+    ...pipeline,
+  ]);
+  if (!result) throw HttpError(HTTP_STATUS.notFound);
   res.json(result);
 };

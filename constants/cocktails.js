@@ -10,7 +10,7 @@ export const categoryList = [
   'Punch/Party Drink',
   'Beer',
   'Soft Drink',
-].map(itm => itm.toLocaleLowerCase());
+];
 
 export const glassList = [
   'Highball glass',
@@ -45,7 +45,7 @@ export const glassList = [
   'Martini Glass',
   'Balloon Glass',
   'Coupe Glass',
-].map(itm => itm.toLocaleLowerCase());
+];
 
 // поля, которые потенциально могут прийти в теле запроса
 export const reservedFields = {
