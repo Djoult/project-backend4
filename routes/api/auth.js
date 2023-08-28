@@ -23,11 +23,11 @@ authRouter.patch(
 );
 authRouter.get("/current", authenticate, authController.getCurrent);
 authRouter.get("/verify/:verificationToken", authController.verify);
-authRouter.post(
-  "/verify",
-  validateBody(authSchema.userEmail),
-  authController.resendVerify
-);
+// authRouter.post(
+//   "/verify",
+//   validateBody(authSchema.userEmail),
+//   authController.resendVerify
+// );
 authRouter.post("/logout", authenticate, authController.logOut);
 
 export default authRouter;

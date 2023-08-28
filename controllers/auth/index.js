@@ -4,7 +4,7 @@ import singUp from "./singUp.js";
 import singIn from "./singIn.js";
 import updateUser from "./updateUser.js";
 import verify from "./verify.js";
-import resendVerify from "./resendVerify.js";
+// import resendVerify from "./resendVerify.js";
 import getCurrent from "./getCurrent.js";
 import logOut from "./logOut.js";
 
@@ -13,7 +13,7 @@ export default {
   singIn: ctrlWrapper(singIn),
   updateUser: ctrlWrapper(updateUser),
   verify: ctrlWrapper(verify),
-  resendVerify: ctrlWrapper(resendVerify),
+  // resendVerify: ctrlWrapper(resendVerify),
   getCurrent: ctrlWrapper(getCurrent),
   logOut: ctrlWrapper(logOut),
 };
