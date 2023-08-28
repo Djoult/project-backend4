@@ -4,7 +4,7 @@ import { isEmptyBody, isValidId } from '../../middlewares/index.js';
 import { joiSchema as schema } from '../../schemas/recipes/index.js';
 import { ctrl } from '../../controllers/recipes/index.js';
 
-export const router = express.Router();
+const router = express.Router();
 
 // router.use(':id', isValidId);
 
@@ -20,3 +20,5 @@ router.get('/search', ctrl.search);
 
 // получение одного рецепта по id
 router.get('/:id', isValidId, ctrl.getById);
+
+export default router;
