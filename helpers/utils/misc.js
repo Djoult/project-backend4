@@ -13,6 +13,7 @@ export const isNonEmptyArray = v => {
 // joi-валидатор для email
 export const isValidEmail = (v, options = { minDomainSegments: 2 }) => {
   const { error } = Joi.string().email(options).validate(v);
+  console.log('isValidEmail', v);
   return !error;
 };
 

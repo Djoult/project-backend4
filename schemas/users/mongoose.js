@@ -43,7 +43,7 @@ const shape = {
     default: false,
   },
 
-  verificationCode: {
+  verificationToken: {
     type: String,
     default: null,
   },

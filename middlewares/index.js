@@ -10,3 +10,4 @@ export const isEmptyBody = ctrlWrapper(_isEmptyBody);
 export const isRecipeExists = ctrlWrapper(_isRecipeExists);
 export const isValidId = ctrlWrapper(_isValidId);
 export const isUserExists = ctrlWrapper(_isUserExists);
+export {default as upload} from "./upload.js";
