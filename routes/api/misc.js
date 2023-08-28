@@ -6,9 +6,7 @@ import { ctrl } from '../../controllers/misc/index.js';
 const router = express.Router();
 
 // список тары
+// recipes/glass?sort={asc|desc}
 router.get('/glass', ctrl.getGlassList);
-
-// список ингредиентов
-router.get('/ingredients/list', ctrl.getIngredientList);
 
 export default router;

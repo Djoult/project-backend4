@@ -12,10 +12,15 @@ const router = express.Router();
 router.post('/own', isEmptyBody, validateBody(schema.addRecipe), ctrl.add);
 
 // список всех категорий
+// recipes/category-list?sort={asc|desc}
 router.get('/category-list', ctrl.getCategoryList);
 
+// список ингредиентов
+// recipes/ingredients-list?page=..&limit=..&title=..
+router.get('/ingredients-list', ctrl.getIngredientList);
+
 // посик по названию, категории и ингредиенту
-// recipes/search?drink=...&category=...&ingredient=...
+// recipes/search?drink=...&category=...&ingredient=...&page=..&limit=..
 router.get('/search', ctrl.search);
 
 // получение одного рецепта по id

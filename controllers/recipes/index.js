@@ -2,6 +2,7 @@ import { ctrlWrapper } from '../../decorators/index.js';
 import { add } from './add.js';
 import { getById } from './getById.js';
 import { getCategoryList } from './getGategoryList.js';
+import { getIngredientList } from './getIngredientList.js';
 import { search } from './search.js';
 
 export const ctrl = {
@@ -9,4 +10,5 @@ export const ctrl = {
   getById: ctrlWrapper(getById),
   getCategoryList: ctrlWrapper(getCategoryList),
   search: ctrlWrapper(search),
+  getIngredientList: ctrlWrapper(getIngredientList),
 };
