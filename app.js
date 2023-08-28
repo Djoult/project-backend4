@@ -3,7 +3,13 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import chalk from 'chalk';
-import { authRouter, recipesRouter, miscRouter } from './routes/api/index.js';
+import { authRouter, recipesRouter, miscRouter, subscriptionRouter } from './routes/api/index.js';
+import swaggerUi from "swagger-ui-express";
+import bodyParser from 'body-parser';
+import { readFile } from 'fs/promises';
+const swaggerDocument = JSON.parse(
+  await readFile(new URL('./swagger.json', import.meta.url))
+);
 
 const app = express();
 
@@ -13,10 +19,17 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+app.use(bodyParser.json()); // Розпарсуємо JSON дані з тіла запиту
 
 app.use('/api', miscRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
+app.use('/api/subscription', subscriptionRouter); //роут на підписку
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
