@@ -19,12 +19,12 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
-app.use(bodyParser.json()); // Розпарсуємо JSON дані з тіла запиту
 
 app.use('/api', miscRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
-app.use('/api/subscription', subscriptionRouter); //роут на підписку
+app.use('/api/subscriptions', subscriptionRouter); //роут на підписку і відписку
+
 app.use(
   "/api-docs",
   swaggerUi.serve,
