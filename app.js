@@ -1,16 +1,11 @@
+import 'dotenv/config';
 import express from 'express';
-import swaggerUi from "swagger-ui-express";
-// import swaggerDocument from "./swagger.json" assert { type: "json" };
 import logger from 'morgan';
 import cors from 'cors';
-import 'dotenv/config';
-import {
-  authRouter,
-  recipesRouter,
-  subscriptionRouter,
-} from './routes/api/index.js';
+import chalk from 'chalk';
+import { authRouter, recipesRouter, miscRouter, subscriptionRouter } from './routes/api/index.js';
+import swaggerUi from "swagger-ui-express";
 import bodyParser from 'body-parser';
-
 import { readFile } from 'fs/promises';
 const swaggerDocument = JSON.parse(
   await readFile(new URL('./swagger.json', import.meta.url))
@@ -26,6 +21,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(bodyParser.json()); // Розпарсуємо JSON дані з тіла запиту
 
+app.use('/api', miscRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
 app.use('/api/subscription', subscriptionRouter); //роут на підписку
@@ -40,8 +36,14 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  const { status = 500, message = 'Server error' } = err;
-  res.status(status).json(message);
+  const { status = 500, message = 'Server error', stack } = err;
+
+  if (status === 500) {
+    console.error(chalk.blackBright(stack));
+    return res.status(status).json({ message: 'Server error' });
+  }
+
+  res.status(status).json({ message });
 });
 
 export default app;

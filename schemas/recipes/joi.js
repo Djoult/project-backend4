@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { isValidObjectId } from 'mongoose';
 
 import {
   setJoiShapeTrimAll,
@@ -18,6 +19,7 @@ import {
 
 const {
   title: titleData,
+  thumb: thumbData,
   aboutRecipe,
   instructions,
   drinkThumb,
@@ -31,6 +33,11 @@ const title = Joi.string()
   .max(titleData.max)
   .messages({ '*': `{{#label}}: ${titleData.message}` });
 
+// const thumb = Joi.string()
+//   .required()
+//   .pattern(thumbData.pattern)
+//   .messages({ '*': `{{#label}}: ${thumbData.message}` });
+
 //
 // doc shape
 //
@@ -38,7 +45,7 @@ const title = Joi.string()
 const shape = {
   drink: title,
 
-  aboutRecipe: Joi.string()
+  about: Joi.string()
     .pattern(aboutRecipe.pattern)
     .max(aboutRecipe.max)
     .default(null)
@@ -47,13 +54,13 @@ const shape = {
   category: Joi.string()
     .required()
     .lowercase()
-    .valid(...categoryList)
+    .valid(...categoryList.map(itm => itm.toLocaleLowerCase()))
     .messages({ '*': `{{#label}}: Unknown value` }),
 
   glass: Joi.string()
     .required()
     .lowercase()
-    .valid(...glassList)
+    .valid(...glassList.map(itm => itm.toLocaleLowerCase()))
     .messages({ '*': `{{#label}}: Unknown value` }),
 
   instructions: Joi.string()
@@ -73,8 +80,7 @@ const shape = {
         .pattern(measure.pattern)
         .min(measure.min)
         .messages({ '*': `{{#label}}: ${measure.message}` }),
-    })
-    .messages({ '*': `{{#label}}: ${ingredients.message}` }),
+    }),
 };
 
 // добавляем trim() всем текстовым полям
@@ -86,15 +92,3 @@ setJoiShapeReserved(shape, reservedFields);
 export const schema = {
   addRecipe: Joi.object(shape),
 };
-
-// console.log(
-//   schema.addRecipe.validate({
-//     drink: 'sfwqw',
-//     category: 'shake',
-//     glass: 'jar',
-//     instructions: 'seqewqewqeewqeqweqweqweqs',
-//     alcoholic: true,
-//     video: null,
-//     ingredients: [{ title: 'swq', measure: '2cl' }],
-//   }).error?.details[0].message
-// );

@@ -1,4 +1,12 @@
-export { default as isValidId } from "./isValidId.js";
-export { default as isEmptyBody } from "./isEmptyBody.js";
-export { default as validateBody } from "./validateBody.js";
-export { default as authenticate } from "./authenticate.js";
+import { ctrlWrapper } from '../decorators/index.js';
+import { authenticate as auth } from './authenticate.js';
+import { isEmptyBody as _isEmptyBody } from './isEmptyBody.js';
+import { isRecipeExists as _isRecipeExists } from './isRecipeExists.js';
+import { isValidId as _isValidId } from './isValidId.js';
+import { isUserExists as _isUserExists } from './isUserExists.js';
+
+export const authenticate = ctrlWrapper(auth);
+export const isEmptyBody = ctrlWrapper(_isEmptyBody);
+export const isRecipeExists = ctrlWrapper(_isRecipeExists);
+export const isValidId = ctrlWrapper(_isValidId);
+export const isUserExists = ctrlWrapper(_isUserExists);

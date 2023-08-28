@@ -7,12 +7,12 @@ const REGEXP = {
   singleDupKey: /{\s+(.+):.+\}$/,
 };
 
-// const connect = async (dbName, varName = 'DB_HOST') => {
-//   const uri = process.env[varName].replace('<db_name>', dbName || '');
-//   if (process.env.NODE_ENV === 'development') console.log(uri);
+const connect = async (dbName, varName = 'DB_HOST') => {
+  const uri = process.env[varName].replace('<db_name>', dbName || '');
+  if (process.env.NODE_ENV === 'development') console.log(uri);
 
-//   return await mongoose.connect(uri);
-// };
+  return await mongoose.connect(uri);
+};
 
 const parseValidationErrorMessage = errOrMsg => {
   const message = errOrMsg?.message ?? errOrMsg ?? '';
@@ -36,8 +36,13 @@ const parseDupKeyErrorMessage = errOrMsg => {
   };
 };
 
+const makeObjectId = s => {
+  return new mongoose.Types.ObjectId(s);
+};
+
 export const db = {
-  // connect,
+  connect,
   parseDupKeyErrorMessage,
   parseValidationErrorMessage,
+  makeObjectId,
 };

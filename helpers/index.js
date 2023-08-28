@@ -1,3 +1,5 @@
+export * from './utils/index.js';
+export * from './HttpError.js';
 export * from './utils/misc.js';
 export { default as HttpError } from './HttpError.js';
 export { default as cloudinary } from './cloudinary.js';

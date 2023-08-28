@@ -4,7 +4,7 @@ import { isValidEmail } from '../helpers/index.js';
 // по возможности можно заменить
 const regexp = {
   link: /^https?:\/\/[^\s]+$/,
-  title: /^[a-z0-9][a-z0-9-\s]{2,}$/i,
+  title: /^[a-z0-9][a-z0-9-\s\.]{2,}$/i,
   recipe: /^[a-z0-9][\s\w-\.,:;!'"()]{24,}$/i,
   about: /^[a-z0-9][\s\w\.,"']{24,}$/i,
   measure: /^\d+\s*[a-z]+$/i,
@@ -16,14 +16,21 @@ const title = {
   message: [
     `Must be at least 3 characters long`,
     `start with a letter or number,`,
-    `contain spaces, dashes, numbers and latin letters`,
+    `contain spaces, dashes, numbers, dots and latin letters`,
     `(e.g. "Irish Coffee" or "7-Up")`,
   ].join(' '),
   max: 150,
 };
 
+const thumb = {
+  pattern: regexp.link,
+  message: 'Valid link expected',
+};
+
 const recipeFields = {
   title,
+  thumb,
+
   drink: title,
 
   aboutRecipe: {
@@ -48,10 +55,7 @@ const recipeFields = {
     max: 2500,
   },
 
-  drinkThumb: {
-    pattern: regexp.link,
-    message: 'Invalid link',
-  },
+  drinkThumb: thumb,
 
   measure: {
     pattern: regexp.measure,
@@ -77,13 +81,11 @@ const userFields = {
       'start with a capital',
       'and be at least 2 characters long',
     ].join(' '),
-    normalizer: v => v.replace(/\s+/, ' '),
   },
 
   email: {
-    message: 'Invalid email',
+    message: 'Valid email expected',
     validator: isValidEmail,
-    //normalizer: v => v.toLowerCase(),
   },
 
   password: {
