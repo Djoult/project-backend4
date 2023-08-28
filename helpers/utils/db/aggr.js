@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 import {
   unwind,
   mergeObj,
@@ -15,7 +13,7 @@ import {
  * по имени из коллекции ingredients
  *
  * NOTE: чтобы ускорить - создать индекс
- * для title ингредиента в коллекции ingridients
+ * для title ингредиента в коллекции ingredients
  */
 export const getRecipeIngredientsAggrPipeline = () => [
   unwind('$ingredients'),

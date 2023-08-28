@@ -17,5 +17,8 @@ export const isValidEmail = (v, options = { minDomainSegments: 2 }) => {
 };
 
 export const normalizeStr = (...args) => {
-  return args?.map(v => (isStr(v) ? v.trim().replace(/\s+/g, ' ') : ''));
+  return args?.map(v => {
+    if (!isStr(v)) return '';
+    return v.toLocaleLowerCase().replace(/\s+/g, ' ').trim();
+  });
 };

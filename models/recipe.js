@@ -10,3 +10,5 @@ schema.post('findOneAndUpdate', hook.handlePostSaveError);
 schema.post('save', hook.handlePostSaveError);
 
 export const Recipe = model('recipe', schema);
+
+export default Recipe;

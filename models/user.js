@@ -10,3 +10,5 @@ schema.post('findOneAndUpdate', hook.handlePostSaveError);
 schema.post('save', hook.handlePostSaveError);
 
 export const User = model('user', schema);
+
+export default User;

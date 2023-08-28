@@ -1,9 +1,6 @@
 import { Schema } from 'mongoose';
 import { validationMap } from '../../constants/index.js';
-import { 
-  setMongooseShapeNormalizeAll, 
-  setMongooseShapeTrimAll } 
-from '../../helpers/index.js';
+import { setMongooseShapeNormalizeAll } from '../../helpers/index.js';
 
 const { name, email, password } = validationMap;
 
