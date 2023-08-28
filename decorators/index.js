@@ -1,1 +1,2 @@
-export { default as ctrlWrapper } from "./ctrlWrapper.js";
+export * from './ctrlWrapper.js';
+export * from './validateBody.js';

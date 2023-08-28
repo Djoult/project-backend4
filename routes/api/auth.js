@@ -1,18 +1,20 @@
 import express from "express";
-import { authSchema } from "../../schemas/index.js";
+// import { authSchema } from "../../schemas/index.js";
+import { joiSchema } from '../../schemas/users/index.js';
 import { authController } from "../../controllers/index.js";
-import { validateBody, authenticate, upload } from "../../middlewares/index.js";
+import { authenticate, upload } from "../../middlewares/index.js";
+import { validateBody } from "../../decorators/validateBody.js";
 
 const authRouter = express.Router();
 
 authRouter.post(
   "/singup",
-  validateBody(authSchema.userSingUp),
+  validateBody(joiSchema.signup),
   authController.singUp
 );
 authRouter.post(
   "/singin",
-  validateBody(authSchema.userSingIn),
+  validateBody(joiSchema.signin),
   authController.singIn
 );
 authRouter.patch(

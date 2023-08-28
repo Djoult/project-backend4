@@ -1,19 +1,14 @@
-import { Schema, model } from "mongoose";
+import { model } from 'mongoose';
+import { mongooseSchema as schema } from '../schemas/recipes/index.js';
+import * as hook from './hooks.js';
 
-import { handleSaveError, handleUpdateValidate } from "../hooks/index.js";
+// валидация при обновлении
+schema.pre('findOneAndUpdate', hook.handlePreUpdateValidate);
 
-const recipeSchema = new Schema(
-  {},
+// обработка ошибок при обновлении и добавлении
+schema.post('findOneAndUpdate', hook.handlePostSaveError);
+schema.post('save', hook.handlePostSaveError);
 
-  { versionKey: false, timestamps: true }
-);
-
-recipeSchema.pre("findOneAndUpdate", handleUpdateValidate);
-
-recipeSchema.post("save", handleSaveError);
-
-recipeSchema.post("findOneAndUpdate", handleSaveError);
-
-const Recipe = model("recipe", recipeSchema);
+export const Recipe = model('recipe', schema);
 
 export default Recipe;

@@ -1,11 +1,7 @@
-import {HttpError} from "../helpers/index.js";
+import { HttpError } from '../helpers/index.js';
+import { HTTP_STATUS } from '../constants/index.js';
 
-const isEmptyBody = (req, _, next) => {
-  const { length } = Object.keys(req.body);
-  if (!length) {
-    next(HttpError(400, `The fields must be required`));
-  }
-  next();
+export const isEmptyBody = (req, res, next) => {
+  if (Object.keys(req.body).length) return next();
+  throw HttpError(HTTP_STATUS.badRequest, 'Body is empty');
 };
-
-export default isEmptyBody;
