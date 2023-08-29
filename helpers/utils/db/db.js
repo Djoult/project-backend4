@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 import 'dotenv/config';
 
+const SORT_ORDER = {
+  asc: 1,
+  desc: -1,
+};
+
 const REGEXP = {
   reason: /^(?:[^:]+:){2}\s+(.+)$/,
   collectionName: /^.+:\s+(.+)\s+index/,
@@ -40,8 +45,19 @@ const makeObjectId = s => {
   return new mongoose.Types.ObjectId(s);
 };
 
+// fieldName:[asc|desc]
+export const parseSortQueryParam = param => {
+  let [fieldName, order = 'asc'] = param?.split(':') ?? '';
+  // (!) fieldName нельзя делать lowerCase
+  return {
+    fieldName: fieldName?.trim(),
+    order: SORT_ORDER[order] ?? SORT_ORDER['asc'],
+  };
+};
+
 export const db = {
   connect,
+  parseSortQueryParam,
   parseDupKeyErrorMessage,
   parseValidationErrorMessage,
   makeObjectId,

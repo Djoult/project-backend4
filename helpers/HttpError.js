@@ -6,4 +6,4 @@ export const HttpError = (status, message = HTTP_STATUS_TEXT[status]) => {
   return error;
 };
 
-export default HttpError;
+//export default HttpError;

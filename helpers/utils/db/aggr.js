@@ -44,5 +44,5 @@ export const getRecipeIngredientsAggrPipeline = () => [
   },
   { $addFields: { 'data.ingredients': '$ingredients' } },
   { $replaceRoot: { newRoot: '$data' } },
-  removeFields('ingredients_details', 'ingredients._id'),
+  removeFields('ingredients_details' /* 'ingredients._id' */),
 ];
