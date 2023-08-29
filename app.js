@@ -3,8 +3,13 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import chalk from 'chalk';
-import { authRouter, recipesRouter, miscRouter, subscriptionRouter } from './routes/api/index.js';
-import swaggerUi from "swagger-ui-express";
+import {
+  authRouter,
+  recipesRouter,
+  miscRouter,
+  subscriptionRouter,
+} from './routes/api/index.js';
+import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import { readFile } from 'fs/promises';
 const swaggerDocument = JSON.parse(
@@ -23,8 +28,8 @@ app.use(express.static('public'));
 app.use('/api', miscRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
-app.use('/api/subscriptions', subscriptionRouter); //роут на підписку і відписку
 
+app.use('/api/subscriptions', subscriptionRouter); //роут на підписку і відписку
 app.use(
   "/api-docs",
   swaggerUi.serve,

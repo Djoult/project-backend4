@@ -71,6 +71,9 @@ const shape = {
       '*': `{{#label}}: ${instructions.message}`,
     }),
 
+  // !!! TODO: убрать после тестов
+  users: Joi.array(),
+
   ingredients: Joi.array()
     .required()
     .items({

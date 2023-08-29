@@ -3,21 +3,28 @@ import { validateBody } from '../../decorators/index.js';
 import { isEmptyBody, isValidId } from '../../middlewares/index.js';
 import { joiSchema as schema } from '../../schemas/recipes/index.js';
 import { ctrl } from '../../controllers/recipes/index.js';
+import { isRecipeExists } from '../../middlewares/index.js';
 
 const router = express.Router();
 
-// router.use(':id', isValidId);
-
 // добавление рецепта
-router.post('/own', isEmptyBody, validateBody(schema.addRecipe), ctrl.add);
+router.post(
+  '/own',
+  isEmptyBody,
+  isRecipeExists,
+  validateBody(schema.addRecipe),
+  ctrl.add
+);
 
 // список всех категорий
 // recipes/category-list?sort={asc|desc}
 router.get('/category-list', ctrl.getCategoryList);
 
 // список ингредиентов
-// recipes/ingredients-list?page=..&limit=..&title=..
-router.get('/ingredients-list', ctrl.getIngredientList);
+// recipes/ingredient-list?page=..&limit=..&title=..
+router.get('/ingredient-list', ctrl.getIngredientList);
+
+router.get('/main-page', ctrl.getMainPageRecipes);
 
 // посик по названию, категории и ингредиенту
 // recipes/search?drink=...&category=...&ingredient=...&page=..&limit=..
