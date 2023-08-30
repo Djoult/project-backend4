@@ -1,29 +1,31 @@
 import sendEmail from "../../helpers/sendEmail.js";
 import Subscription from "../../models/subscription.js";
+import User from "../../models/user.js";
 // Функція для підписки користувача
 export const subscribe = async (req, res) => {
   const { email_address } = req.body;
+  const { id } = req.user;
 
   try {
-    // шукаємо існуючу підписку 
-    const existingSubscription = await Subscription.findOne({ email_address });
+    // Шукаємо існуючу підписку
+    let existingSubscription = await Subscription.findOne({ email_address });
 
-    if (existingSubscription) {
-      // Якщо підписка існує, перевіряємо, чи вона не підписана
-      if (!existingSubscription.subscribed) {
-        existingSubscription.subscribed = true; // Якщо не підписана, встановлюємо підписку на true
-        await existingSubscription.save();// Зберігаємо зміни в базі даних
-      }
-    } else {
-      // Якщо підписка не існує, створюємо нову підписку
-      const newSubscription = new Subscription({ email_address });
-      await newSubscription.save();// Зберігаємо нову підписку в базі даних
+    if (!existingSubscription) {
+      // Якщо підписки немає, створюємо нову
+      existingSubscription = new Subscription({ email_address });
+      await existingSubscription.save(); // Зберігаємо нову підписку в базі даних
+    } else if (!existingSubscription.subscribed) {
+      // Якщо підписка існує, але не підписана
+      existingSubscription.subscribed = true;
+      await existingSubscription.save(); // Зберігаємо зміни в базі даних
     }
+    //знаходимо користувача та підписуємо його
+    await User.findByIdAndUpdate(id, { subscription: email });
  // Підготовка та надсилання листа підтвердження підписки
     const confirmationEmail = {
       to: email_address,
       subject: "Subscription Confirmation",
-      html: "<p>Thank you for subscribing to our newsletter!</p>",
+      html: "<p>Thank you for subscribing to our recipes!</p>",
     };
 
     await sendEmail(confirmationEmail);
