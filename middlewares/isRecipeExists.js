@@ -11,7 +11,7 @@ export const isRecipeExists = async ({ body, user }, res, next) => {
 
   const found = await Recipe.findOne({
     //owner,
-    drink: regex(drink, true),
+    drink: regex(drink, '', true),
   });
 
   if (found)

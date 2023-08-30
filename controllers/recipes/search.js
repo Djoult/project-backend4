@@ -7,7 +7,7 @@ import {
   regex,
   normalizeStr,
   isEmptyObj as isEmpty,
-  getRecipeIngredientsAggrPipeline,
+  recipeAggregationStages,
   parseSortQueryParam,
   parseRequestQuery,
   isNonEmptyArray,
@@ -46,8 +46,8 @@ export const search = async ({ user, query }, res) => {
     _id: db.makeObjectId('64ece50c9fceb55e2b121336'),
   };
 
-  // базовый конвеер
-  const pipeline = getRecipeIngredientsAggrPipeline();
+  const { lookupIngredients } = recipeAggregationStages;
+  const pipeline = [...lookupIngredients()];
 
   //
   // пагинация

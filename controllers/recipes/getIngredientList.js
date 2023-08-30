@@ -8,8 +8,8 @@ const SORT_ORDER = {
 };
 
 /**
- * tile должен быть частью имени искомого ингредиента (case-insensitive)
- * - recipes/ingredient-list?
+ *
+ *  - recipes/ingredient-list?
  *      title=..&
  *      page=..&
  *      limit=..&
