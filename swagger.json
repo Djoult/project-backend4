@@ -11,15 +11,30 @@
     },
     "consumes": ["application/json"],
     "produces": ["application/json"],
-    "servers": [{ "url": "http://localhost:3000" }],
+    "servers": [
+		{ "url": "https://drinkmaster-backend.onrender.com/api" },
+		{ "url": "http://localhost:3000/api" }
+	],
     "tags": [
-      {
-        "name": "Auth",
-        "description": "Authorization endpoints"
-      }
+        {
+			"name": "Auth",
+			"description": "Authorization endpoints"
+		},
+		{
+			"name": "Recipes",
+			"description": "Recipes endpoints"
+		},
+		{
+			"name": "Glass list",
+			"description": "Glass list endpoints"
+		},
+		{
+			"name": "Subscribe",
+			"description": "Subscribe endpoints"
+		}
     ],
     "paths": {
-      "/auth/register": {
+      "/auth/singup": {
         "post": {
           "tags": ["Auth"],
           "summary": "User registration",
@@ -63,8 +78,12 @@
       "schemas": {
         "RegistrationRequest": {
           "type": "object",
-          "required": ["email", "password"],
+          "required": ["name", "email", "password"],
           "properties": {
+            "name": {
+                "type": "string",
+                "description": "User's name"
+              },
             "email": {
               "type": "string",
               "description": "User's email",
@@ -73,7 +92,7 @@
             "password": {
               "type": "string",
               "description": "User's password",
-              "example": "qwerty123"
+              "example": "Qwerty123"
             }
           }
         },
