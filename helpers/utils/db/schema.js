@@ -18,11 +18,14 @@ export const setJoiShapeReserved = (shape, reserved) => {
 
 // добавлят свойство { trim: true } всем строковым полям
 export const setMongooseShapeNormalizeAll = shape => {
-  Object.entries(shape).forEach(([, field]) => {
-    if (field.type !== String) return;
+  Object.entries(shape).forEach(([fieldName, fieldData]) => {
+    if (fieldData.type !== String) return;
 
-    field.trim = true;
-    field.set = v => v?.replace(/\s+/g, ' ');
+    fieldData.trim = true;
+    fieldData.set = v => {
+      console.log(fieldName, v);
+      return v?.replace(/\s+/g, ' ');
+    };
   });
 };
 

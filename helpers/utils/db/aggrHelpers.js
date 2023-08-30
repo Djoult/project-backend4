@@ -20,15 +20,12 @@ export const unwind = (path, preserveNullAndEmptyArrays = true) => ({
   $unwind: { path, preserveNullAndEmptyArrays },
 });
 
-// export const regex = (s, wholeWord = false) => ({
-//   $regex: RegExp(wholeWord ? `^${s}$` : `${s}`, 'i'),
-// });
-
 export const regex = (v, targetField, wholeWord = false) => {
   if (!v) return;
   const list = isArray(v) ? v : [v];
   const res = list.map(s => normalizeStr(s)).join('|');
   const pat = { $regex: RegExp(wholeWord ? `^${res}$` : `${res}`, 'i') };
+
   return targetField ? { [targetField]: pat } : pat;
 };
 
