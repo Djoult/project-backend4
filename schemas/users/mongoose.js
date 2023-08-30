@@ -43,6 +43,11 @@ const shape = {
     default: false,
   },
 
+    subscription: {
+      type: String,
+      default: "",
+    },
+
   verificationToken: {
     type: String,
     default: null,
