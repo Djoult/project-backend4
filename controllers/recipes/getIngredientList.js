@@ -1,6 +1,18 @@
-import { HttpError, regex, normalizeStr } from '../../helpers/index.js';
-import { HTTP_STATUS, DEF_PAGE, DEF_LIMIT } from '../../constants/index.js';
 import { Ingredient } from '../../models/index.js';
+
+import {
+  HTTP_STATUS,
+  DEF_PAGE,
+  DEF_LIMIT,
+  MAX_LIMIT,
+} from '../../constants/index.js';
+
+import {
+  HttpError,
+  regex,
+  normalizeStr,
+  fitIntoRange,
+} from '../../helpers/index.js';
 
 const SORT_ORDER = {
   asc: 1,
@@ -18,9 +30,10 @@ const SORT_ORDER = {
 export const getIngredientList = async ({ query }, res) => {
   let { page, limit, title, sort } = query;
 
-  page = parseInt(page) || DEF_PAGE;
-  limit = parseInt(limit) || DEF_LIMIT;
   sort = normalizeStr(sort);
+  page = parseInt(page) || DEF_PAGE;
+  limit = fitIntoRange(limit, 0, MAX_LIMIT, DEF_LIMIT);
+
   const filter = title && { title: regex(title) };
 
   // общее кол-во документов, соотвествующих фильтру

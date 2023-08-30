@@ -1,5 +1,11 @@
-import { HTTP_STATUS, DEF_LIMIT, DEF_PAGE } from '../../constants/index.js';
 import { Recipe } from '../../models/index.js';
+
+import {
+  HTTP_STATUS,
+  DEF_LIMIT,
+  DEF_PAGE,
+  MAX_LIMIT,
+} from '../../constants/index.js';
 
 import {
   db,
@@ -11,22 +17,11 @@ import {
   parseSortQueryParam,
   parseRequestQuery,
   isNonEmptyArray,
+  fitIntoRange,
 } from '../../helpers/index.js';
 
-/**
- *
- * - recipes/search?
- *      drink={..}&
- *      category={..}&
- *      ingredient={..}&
- *      glass={..}&
- *      own=[true|false]&
- *      favorite=[true|false]&
- *      thumb=[true|false]&
- *      instructions=[true|false]
- *      sort=fieldName:[asc|desc]
- */
 export const search = async ({ user, query }, res) => {
+  const { _id: owner } = user ?? '';
   let {
     page,
     limit,
@@ -41,11 +36,6 @@ export const search = async ({ user, query }, res) => {
     thumb,
   } = parseRequestQuery(query);
 
-  // !!! TODO: убрать при нормальной авторизации
-  const { _id: owner } = user ?? {
-    _id: db.makeObjectId('64ece50c9fceb55e2b121336'),
-  };
-
   const { lookupIngredients } = recipeAggregationStages;
   const pipeline = [...lookupIngredients()];
 
@@ -54,7 +44,7 @@ export const search = async ({ user, query }, res) => {
   //
 
   page = parseInt(page) || DEF_PAGE;
-  limit = parseInt(limit) || DEF_LIMIT;
+  limit = fitIntoRange(limit, 0, MAX_LIMIT, DEF_LIMIT);
   pipeline.unshift({ $limit: limit }, { $skip: (page - 1) * limit });
 
   //
@@ -81,13 +71,11 @@ export const search = async ({ user, query }, res) => {
 
   own =
     (own === 'true' && { owner }) ||
-    (own === 'false' && { owner: { $ne: owner } }) ||
-    null;
+    (own === 'false' && { owner: { $ne: owner } });
 
   favorite =
     (favorite === 'true' && { users: { $in: [owner] } }) ||
-    (favorite === 'false' && { users: { $nin: [owner] } }) ||
-    null;
+    (favorite === 'false' && { users: { $nin: [owner] } });
 
   thumb =
     (thumb === 'true' && { drinkThumb: { $ne: null } }) ||
@@ -104,8 +92,8 @@ export const search = async ({ user, query }, res) => {
     ...regex(category, 'category'),
     ...regex(ingredient, 'ingredients.title'),
     ...regex(glass, 'glass'),
-    ...(owner && own),
-    ...(owner && favorite),
+    ...own,
+    ...favorite,
     ...instructions,
     ...thumb,
   };
