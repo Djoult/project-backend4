@@ -7,6 +7,13 @@ export const isInt = v => Number.isInteger(+v);
 export const isEmptyObj = v => v && !Object.keys(v).length;
 export const isArray = v => Array.isArray(v);
 
+export const fitIntoRange = (value, min, max, defValue) => {
+  value = isNum(value) ? value : defValue;
+  min = isNum(min) ? min : -Infinity;
+  max = isNum(max) ? max : Infinity;
+  return Math.max(min, Math.min(max, value));
+};
+
 export const isNonEmptyArray = v => {
   return Array.isArray(v) && v.length;
 };

@@ -1,4 +1,5 @@
-import { isArray, normalizeStr } from '../index.js';
+import { isArray, normalizeStr, fitIntoRange } from '../index.js';
+import { DEF_SAMPLE_COUNT, MAX_SAMPLE_COUNT } from '../../../constants/misc.js';
 
 import {
   unwind,
@@ -8,8 +9,6 @@ import {
   removeFields,
   regexMatch,
 } from './aggrHelpers.js';
-
-const DEF_SAMPLE_COUNT = 3;
 
 /**
  *
@@ -55,17 +54,18 @@ const lookupIngredients = () => {
 
 /**
  *
- * Конвеер для выборки заданного кол-ва случайных рецептов
- * заданной категории
+ * Конвеер для выборки заданного кол-ва случайных рецептов заданной категории
  *
  * @param {*} category - список категорий
  * @param {number} sampleCount - кол-во случайно выбранных
- *    документов заданной категорий
+ *    документов заданной категории
+ * @param {object} extraFilter - дополнительные $match фильтры
+ *    при овыборке по категориям
  * @returns {array} - конвеер для агрегации
  */
-const groupRecipesByCategory = (category, sampleCount) => {
+const groupRecipesByCategory = (category, sampleCount, extraFilter) => {
   return [
-    ...getCategorySamples(category, sampleCount),
+    ...getCategorySamples(category, sampleCount, extraFilter),
     ...lookupIngredients(),
     ...groupByCategory(),
   ];
@@ -80,17 +80,24 @@ export const recipeAggregationStages = {
 // helpers
 //
 
-const getCategorySamples = (categoryList, sampleCount) => {
-  sampleCount = parseInt(sampleCount) || DEF_SAMPLE_COUNT;
+const getCategorySamples = (categoryList, sampleCount, extraFilter) => {
+  sampleCount = fitIntoRange(
+    sampleCount,
+    0,
+    MAX_SAMPLE_COUNT,
+    DEF_SAMPLE_COUNT
+  );
+
   const list = isArray(categoryList) ? categoryList : [categoryList];
 
-  // формируем $facet
+  // формируем $facet для выборки заданного кол-ва
+  // случайных рецептов заданных категорий
   const facetValue = list.reduce((res, categoryName, idx) => {
     res[idx] = [
       {
         $match: {
           category: { $regex: RegExp(normalizeStr(categoryName), 'i') },
-          drinkThumb: { $ne: null },
+          ...extraFilter,
         },
       },
       { $sample: { size: Number(sampleCount) } },
@@ -105,7 +112,7 @@ const getCategorySamples = (categoryList, sampleCount) => {
     { $facet: { ...facetValue } },
     { $project: { result: { $concatArrays: [...facetKeyList] } } },
     unwind('$result'),
-    { $replaceRoot: { newRoot: '$result' } },
+    { $replaceRoot: { newRoot: { $ifNull: ['$result', {}] } } },
   ];
 };
 

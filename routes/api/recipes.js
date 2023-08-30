@@ -3,11 +3,17 @@ import { validateBody } from '../../decorators/index.js';
 import { isEmptyBody, isValidId } from '../../middlewares/index.js';
 import { joiSchema as schema } from '../../schemas/recipes/index.js';
 import { ctrl } from '../../controllers/recipes/index.js';
-import { isRecipeExists } from '../../middlewares/index.js';
+import { isRecipeExists, authenticate } from '../../middlewares/index.js';
 
 const router = express.Router();
 
-// добавление рецепта
+// router.use(authenticate);
+
+/**
+ * добавление рецепта
+ *
+ * POST recipes/own
+ */
 router.post(
   '/own',
   isEmptyBody,
@@ -16,18 +22,50 @@ router.post(
   ctrl.add
 );
 
-// список всех категорий
-// recipes/category-list?sort={asc|desc}
+/**
+ * список всех категорий
+ *
+ * GET recipes/category-list
+ *    ?sort=[asc|desc]
+ */
 router.get('/category-list', ctrl.getCategoryList);
 
-// список ингредиентов
-// recipes/ingredient-list?page=..&limit=..&title=..
+/**
+ * список ингредиентов
+ *
+ *  GET recipes/ingredient-list
+ *      ?title=..
+ *      &page=..
+ *      &limit=..
+ *      &sort=[asc|desc]
+ */
 router.get('/ingredient-list', ctrl.getIngredientList);
 
+/**
+ * список рецпептов, указанных категорий для главной
+ *
+ * GET recipes/main-page
+ *    ?category=..
+ *    &samples=..
+ *    &thumb=[true|false]
+ *    &instructions=[true|false]
+ */
 router.get('/main-page', ctrl.getMainPageRecipes);
 
-// посик по названию, категории и ингредиенту
-// recipes/search?drink=...&category=...&ingredient=...&page=..&limit=..
+/**
+ * поиск по критериям
+ *
+ * - recipes/search
+ *      ?drink=..
+ *      &category=..
+ *      &ingredient=..
+ *      &glass=..
+ *      &own=[true|false]
+ *      &favorite=[true|false]
+ *      &thumb=[true|false]
+ *      &instructions=[true|false]
+ *      &sort=fieldName:[asc|desc]
+ */
 router.get('/search', ctrl.search);
 
 // получение одного рецепта по id

@@ -97,10 +97,10 @@ const shape = {
     default: [],
   },
 
-  // owner: {
-  //   ...userRef,
-  //   required: true,
-  // },
+  owner: {
+    ...userRef,
+    required: true,
+  },
 };
 
 // добавляем { trim: true } всем текстовым полям
