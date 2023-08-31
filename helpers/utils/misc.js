@@ -71,3 +71,8 @@ export const getRandomElements = (arr, count) => {
     return src.splice(idx, 1) && src[idx];
   });
 };
+
+export const capitalize = (s, allWords = true) => {
+  const re = RegExp('(?<=\\s|^)\\w', allWords ? 'g' : '');
+  return s.replace(re, m => m.toLocaleUpperCase());
+};

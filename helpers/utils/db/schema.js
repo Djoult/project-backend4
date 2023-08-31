@@ -22,10 +22,7 @@ export const setMongooseShapeNormalizeAll = shape => {
     if (fieldData.type !== String) return;
 
     fieldData.trim = true;
-    fieldData.set = v => {
-      console.log(fieldName, v);
-      return v?.replace(/\s+/g, ' ');
-    };
+    fieldData.set = v => v?.replace(/\s+/g, ' ');
   });
 };
 
