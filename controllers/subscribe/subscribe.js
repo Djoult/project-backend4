@@ -20,7 +20,7 @@ export const subscribe = async (req, res) => {
       await existingSubscription.save(); // Зберігаємо зміни в базі даних
     }
     //знаходимо користувача та підписуємо його
-    await User.findByIdAndUpdate(id, { subscription: email });
+    await User.findByIdAndUpdate(id, { subscription: email_address });
  // Підготовка та надсилання листа підтвердження підписки
     const confirmationEmail = {
       to: email_address,
