@@ -66,10 +66,8 @@ export const getRandomElements = (arr, count) => {
   const src = [...arr];
   const length = fitIntoRange(count, 0, src.length, src.length);
 
-  return Array.from({ length }).map(el => {
+  return Array.from({ length }, el => {
     const idx = rndInt(0, src.length - 1);
-    const found = src[idx];
-    src.splice(idx, 1);
-    return found;
+    return src.splice(idx, 1) && src[idx];
   });
 };
