@@ -4,6 +4,7 @@ export const isStr = v => typeof v === 'string';
 export const isFunc = v => typeof v === 'function';
 export const isNum = v => !isNaN(v - parseFloat(v));
 export const isInt = v => Number.isInteger(+v);
+export const isPositiveInt = v => isInt(v) && v > 0;
 export const isEmptyObj = v => v && !Object.keys(v).length;
 export const isArray = v => Array.isArray(v);
 
@@ -38,7 +39,40 @@ export const normalizeStr = (...args) => {
 export const parseRequestQuery = (query = '') => {
   return Object.entries(query).reduce((res, [k, v]) => {
     // v - всегда строка, пустая - если значение не передано
-    res[k] = v || 'true';
+    // Конвертим все в строку на случай,
+    // если в req.query будут доавлены параметры из кода
+    // (Например, req.query = { ...req.query, favorite: true };)
+    res[k] = String(v || true);
     return res;
   }, {});
+};
+
+export const rndInt = (min, max) => {
+  const rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+};
+
+/**
+ *
+ * Делает выборку случайных элементов из заданного массива
+ *
+ * @param {array} arr - исходный массив
+ * @param {number} count - размер выборки
+ * @returns {array} - подмассив со случайными элементами
+ */
+export const getRandomElements = (arr, count) => {
+  if (!isArray(arr)) return;
+
+  const src = [...arr];
+  const length = fitIntoRange(count, 0, src.length, src.length);
+
+  return Array.from({ length }, el => {
+    const idx = rndInt(0, src.length - 1);
+    return src.splice(idx, 1) && src[idx];
+  });
+};
+
+export const capitalize = (s, allWords = true) => {
+  const re = RegExp('(?<=\\s|^)\\w', allWords ? 'g' : '');
+  return s.replace(re, m => m.toLocaleUpperCase());
 };

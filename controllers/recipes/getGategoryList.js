@@ -12,7 +12,7 @@ const compFn = {
  *      sort={asc|desc}
  */
 export const getCategoryList = async ({ query }, res) => {
-  let { sort } = query;
+  let { sort = 'asc' } = query;
 
   sort = normalizeStr(sort);
   const result = categoryList.sort(compFn[sort] ?? compFn['asc']);

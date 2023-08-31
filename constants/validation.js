@@ -5,7 +5,7 @@ import { isValidEmail } from '../helpers/index.js';
 const regexp = {
   link: /^https?:\/\/[^\s]+$/,
   title: /^[a-z0-9][a-z0-9-\s\.]{2,}$/i,
-  recipe: /^[a-z0-9][\s\w-\.,:;!'"()]{24,}$/i,
+  instructions: /^[a-z0-9][\s\w-\.,:;!'"()\n\r]{24,}$/i,
   about: /^[a-z0-9][\s\w\.,"']{24,}$/i,
   measure: /^\d+\s*[a-z]+$/i,
   name: /^\s*[A-Z][a-z]+(\s+[A-Z][a-z]+)?\s*$/,
@@ -45,7 +45,7 @@ const recipeFields = {
   },
 
   instructions: {
-    pattern: regexp.recipe,
+    pattern: regexp.instructions,
     message: [
       `Must be at least 25 characters long,`,
       `start with a letter or number,`,

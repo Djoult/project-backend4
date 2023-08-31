@@ -47,6 +47,7 @@ router.get('/ingredient-list', ctrl.getIngredientList);
  * GET recipes/main-page
  *    ?category=..
  *    &samples=..
+ *    &categoryCount=..
  *    &thumb=[true|false]
  *    &instructions=[true|false]
  */
@@ -67,6 +68,20 @@ router.get('/main-page', ctrl.getMainPageRecipes);
  *      &sort=fieldName:[asc|desc]
  */
 router.get('/search', ctrl.search);
+
+router.get('/popular', ctrl.getPopularAll);
+
+router.get('/favorite', ctrl.getFavoriteAll);
+
+router.get('/favorite/:id', isValidId, ctrl.getFavoriteById);
+
+router.patch('/favorite/:id', isValidId, ctrl.updateFavoriteById);
+
+router.get('/own', ctrl.getOwnAll);
+
+router.get('/own/:id', isValidId, ctrl.getOwnById);
+
+router.delete('/own/:id', isValidId, ctrl.removeOwnById);
 
 // получение одного рецепта по id
 router.get('/:id', isValidId, ctrl.getById);

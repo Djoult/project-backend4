@@ -2,6 +2,7 @@ import { Schema } from 'mongoose';
 import { mongooseSchema as ingredientSchema } from '../ingredients/index.js';
 
 import {
+  capitalize,
   setMongooseShapeNormalizeAll,
   setMongooseShapeReserved,
 } from '../../helpers/index.js';
@@ -56,20 +57,26 @@ const shape = {
   category: {
     type: String,
     required: true,
-    lowercase: true,
-    enum: {
-      values: categoryList.map(itm => itm.toLocaleLowerCase()),
-      message: 'Invalid value',
+    validate: {
+      validator: v => {
+        return categoryList
+          .map(itm => itm.toLocaleLowerCase())
+          .includes(v.toLocaleLowerCase());
+      },
+      message: ({ value }) => `"${value}": Unknown value`,
     },
   },
 
   glass: {
     type: String,
     required: true,
-    lowercase: true,
-    enum: {
-      values: glassList.map(itm => itm.toLocaleLowerCase()),
-      message: 'Invalid value',
+    validate: {
+      validator: v => {
+        return glassList
+          .map(itm => itm.toLocaleLowerCase())
+          .includes(v.toLocaleLowerCase());
+      },
+      message: ({ value }) => `"${value}": Unknown value`,
     },
   },
 
@@ -106,12 +113,24 @@ const shape = {
 // добавляем { trim: true } всем текстовым полям
 setMongooseShapeNormalizeAll(shape);
 
+// в БД, для указанных полей, пишем каждое слово с заглавной
+shape.drink.set = shape.category.set = shape.glass.set = capitalize;
+
 // ставим зарезервированные поля в null
 setMongooseShapeReserved(shape, reservedFields);
 
 const schemaOptions = {
   versionKey: false,
   timestamps: true,
+  // toObject: {
+  //   getters: true,
+  //   setters: true,
+  // },
+  // toJSON: {
+  //   getters: true,
+  //   setters: true,
+  // },
+  // runSettersOnQuery: true,
 };
 
 export const schema = new Schema(shape, schemaOptions);
