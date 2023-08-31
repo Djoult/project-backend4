@@ -3,8 +3,7 @@ import { HttpError } from '../../helpers/index.js';
 import { Recipe } from '../../models/index.js';
 
 export const add = async ({ body, user }, res) => {
-  // const { _id: owner } = user;
-  const owner = null;
+  const { _id: owner } = user ?? '';
 
   const result = await Recipe.create({ ...body, owner });
 

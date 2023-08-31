@@ -22,6 +22,7 @@ import {
 
 export const search = async ({ user, query }, res) => {
   const { _id: owner } = user ?? '';
+
   let {
     page,
     limit,

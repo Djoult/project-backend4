@@ -120,6 +120,7 @@ const groupByCategory = () => {
   return [
     {
       $group: {
+        // чтобы не разносило в разные группы например beer и Beer
         _id: { $toLower: '$category' },
         recipes: {
           $push: '$$ROOT',
