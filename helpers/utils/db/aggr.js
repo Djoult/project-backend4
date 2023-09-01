@@ -75,7 +75,6 @@ const getCategorySamples = (categoryList, sampleCount, extraFilter) => {
       },
       { $sample: { size: Number(sampleCount) } },
     ];
-    console.log({ $regex: RegExp(normalizeStr(categoryName), 'i') });
     return res;
   }, {});
 
