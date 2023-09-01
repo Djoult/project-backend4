@@ -1,12 +1,12 @@
-import { ctrlWrapper } from "../../decorators/index.js";
+import { ctrlWrapper } from '../../decorators/index.js';
 
-import singUp from "./singUp.js";
-import singIn from "./singIn.js";
-import updateUser from "./updateUser.js";
-import verify from "./verify.js";
+import singUp from './signup.js';
+import singIn from './signin.js';
+import updateUser from './updateUser.js';
+import verify from './verify.js';
 // import resendVerify from "./resendVerify.js";
-import getCurrent from "./getCurrent.js";
-import logOut from "./logOut.js";
+import getCurrent from './getCurrent.js';
+import logOut from './logout.js';
 
 export default {
   singUp: ctrlWrapper(singUp),

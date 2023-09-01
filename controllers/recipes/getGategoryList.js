@@ -7,10 +7,6 @@ const compFn = {
   desc: (b, a) => b.localeCompare(b),
 };
 
-/**
- * - recipes/category-list?
- *      sort={asc|desc}
- */
 export const getCategoryList = async ({ query }, res) => {
   let { sort = 'asc' } = query;
 

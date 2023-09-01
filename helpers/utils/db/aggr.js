@@ -52,34 +52,7 @@ const lookupIngredients = () => {
   ];
 };
 
-/**
- *
- * Конвеер для выборки заданного кол-ва случайных рецептов заданной категории
- *
- * @param {*} category - список категорий
- * @param {number} sampleCount - кол-во случайно выбранных
- *    документов заданной категории
- * @param {object} extraFilter - дополнительные $match фильтры
- *    при овыборке по категориям
- * @returns {array} - конвеер для агрегации
- */
-const groupRecipesByCategory = (category, sampleCount, extraFilter) => {
-  return [
-    ...getCategorySamples(category, sampleCount, extraFilter),
-    ...lookupIngredients(),
-    ...groupByCategory(),
-  ];
-};
-
-export const recipeAggregationStages = {
-  lookupIngredients,
-  groupRecipesByCategory,
-};
-
-//
-// helpers
-//
-
+// Выборка заданного кол-ва семплов по заданным категорриям
 const getCategorySamples = (categoryList, sampleCount, extraFilter) => {
   sampleCount = fitIntoRange(
     sampleCount,
@@ -116,6 +89,7 @@ const getCategorySamples = (categoryList, sampleCount, extraFilter) => {
   ];
 };
 
+// финальная групировка по категориям
 const groupByCategory = () => {
   return [
     {
@@ -130,9 +104,33 @@ const groupByCategory = () => {
     {
       $project: {
         category: '$_id',
-        recipes: '$recipes',
+        hits: '$recipes',
         _id: 0,
       },
     },
   ];
+};
+
+/**
+ *
+ * Конвеер для выборки заданного кол-ва случайных рецептов заданной категории
+ *
+ * @param {*} category - список категорий
+ * @param {number} sampleCount - кол-во случайно выбранных
+ *    документов заданной категории
+ * @param {object} extraFilter - дополнительные $match фильтры
+ *    при овыборке по категориям
+ * @returns {array} - конвеер для агрегации
+ */
+const groupRecipesByCategory = (category, sampleCount, extraFilter) => {
+  return [
+    ...getCategorySamples(category, sampleCount, extraFilter),
+    ...lookupIngredients(),
+    ...groupByCategory(),
+  ];
+};
+
+export const recipeAggregationStages = {
+  lookupIngredients,
+  groupRecipesByCategory,
 };

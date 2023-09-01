@@ -1,7 +1,13 @@
 import { isValidEmail } from '../helpers/index.js';
 
-// todo: не самые удачные паттерны,
-// по возможности можно заменить
+import {
+  TITLE_MAX_LEN,
+  ABOUT_MAX_LEN,
+  INSTRUCTIONS_MAX_LEN,
+  MEASURE_MIN,
+  PASSWORD_MIN,
+} from './misc.js';
+
 const regexp = {
   link: /^https?:\/\/[^\s]+$/,
   title: /^[a-z0-9][a-z0-9-\s\.]{2,}$/i,
@@ -19,7 +25,7 @@ const title = {
     `contain spaces, dashes, numbers, dots and latin letters`,
     `(e.g. "Irish Coffee" or "7-Up")`,
   ].join(' '),
-  max: 150,
+  max: TITLE_MAX_LEN,
 };
 
 const thumb = {
@@ -41,7 +47,7 @@ const recipeFields = {
       `contain spaces, numbers, latin letters,`,
       `and the following characters: .,"`,
     ].join(' '),
-    max: 350,
+    max: ABOUT_MAX_LEN,
   },
 
   instructions: {
@@ -52,7 +58,7 @@ const recipeFields = {
       `contain spaces, dashes, numbers, latin letters,`,
       `and the following characters: .,:;!"()`,
     ].join(' '),
-    max: 2500,
+    max: INSTRUCTIONS_MAX_LEN,
   },
 
   drinkThumb: thumb,
@@ -64,7 +70,7 @@ const recipeFields = {
       `start with a number followed by a unit of measure`,
       `(e.g. 2 oz)`,
     ].join(' '),
-    min: 3,
+    min: MEASURE_MIN,
   },
 
   ingredients: {
@@ -89,7 +95,7 @@ const userFields = {
   },
 
   password: {
-    min: 6,
+    min: PASSWORD_MIN,
   },
 };
 

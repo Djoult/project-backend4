@@ -6,14 +6,17 @@ import { nanoid } from 'nanoid';
 
 const singUp = async (req, res) => {
   const { name, email, password } = req.body;
-  console.log(name);
+
+  console.log('name: ', name);
+
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, 'Email in use');
   }
 
   const verificationToken = nanoid();
-  console.log(verificationToken);
+  console.log('verificationToken: ', verificationToken);
+
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     name,
@@ -21,6 +24,7 @@ const singUp = async (req, res) => {
     password: hashPassword,
     verificationToken,
   });
+
   const { BASE_URL } = process.env;
 
   const verifyEmail = {
