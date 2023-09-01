@@ -29,6 +29,7 @@ const {
 
 const title = Joi.string()
   .required()
+  .trim()
   .pattern(titleData.pattern)
   .max(titleData.max)
   .messages({ '*': `{{#label}}: ${titleData.message}` });
@@ -79,6 +80,7 @@ const shape = {
     .items({
       title,
       measure: Joi.string()
+        .trim()
         .required()
         .pattern(measure.pattern)
         .min(measure.min)
