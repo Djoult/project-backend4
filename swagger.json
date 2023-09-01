@@ -1,130 +1,401 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-      "version": "2.0.2",
-      "title": "Swagger test",
-      "description": "Showing off swagger-ui-express",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-      }
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "Swagger test",
+    "description": "Showing off swagger-ui-express",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    { "url": "https://drinkmaster-backend.onrender.com/api" },
+    { "url": "http://localhost:3000/api" }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
     },
-    "consumes": ["application/json"],
-    "produces": ["application/json"],
-    "servers": [
-		{ "url": "https://drinkmaster-backend.onrender.com/api" },
-		{ "url": "http://localhost:3000/api" }
-	],
-    "tags": [
-        {
-			"name": "Auth",
-			"description": "Authorization endpoints"
-		},
-		{
-			"name": "Recipes",
-			"description": "Recipes endpoints"
-		},
-		{
-			"name": "Glass list",
-			"description": "Glass list endpoints"
-		},
-		{
-			"name": "Subscribe",
-			"description": "Subscribe endpoints"
-		}
-    ],
-    "paths": {
-      "/auth/singup": {
-        "post": {
-          "tags": ["Auth"],
-          "summary": "User registration",
-          "parameters": [],
-          "security": [{ "Bearer": [] }],
-          "requestBody": {
-            "description": "Registration's object",
-            "required": true,
+    {
+      "name": "Recipes",
+      "description": "Recipes endpoints"
+    },
+    {
+      "name": "Glass list",
+      "description": "Glass list endpoints"
+    },
+    {
+      "name": "Subscribe",
+      "description": "Subscribe endpoints"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationRequest"
+                  "$ref": "#/components/schemas/RegistrationResponse"
                 }
               }
             }
           },
-          "responses": {
-            "201": {
-              "description": "Successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/RegistrationResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad request (invalid request body)",
-              "content": {}
-            },
-            "409": {
-              "description": "Provided email already exists",
-              "content": {}
-            }
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
           }
         }
       }
     },
-    "components": {
-      "schemas": {
-        "RegistrationRequest": {
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/current": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Return current user's data",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/avatars": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Return uploaded avatarURL/name",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Update username",
+          "required": false,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequestMultipart"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "Qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
           "type": "object",
-          "required": ["name", "email", "password"],
           "properties": {
-            "name": {
-                "type": "string",
-                "description": "User's name"
-              },
             "email": {
               "type": "string",
               "description": "User's email",
               "format": "email"
             },
-            "password": {
-              "type": "string",
-              "description": "User's password",
-              "example": "Qwerty123"
+            "userId": {
+              "type": "number",
+              "description": "User's id",
+              "example": "32143232436545474"
             }
           }
         },
-        "RegistrationResponse": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "description": "User's email",
-                "format": "email"
-              },
-              "userId": {
-                "type": "number",
-                "description": "User's id",
-                "example": "32143232436545474"
-              }
+        "example": [
+          { "email": "1@gmail.com", "userId": "1" },
+          { "email": "2@gmail.com", "userId": "2" }
+        ]
+      }
+    },
+    "LoginRequest": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "User's email",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "description": "User's password",
+          "example": "Test123"
+        }
+      }
+    },
+    "LoginResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Authentication token",
+          "example": "wre35R4y3234.jdrit45fk4OrJ45.235wetKFF3460"
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "User's name"
+            },
+            "avatarURL": {
+              "type": "string",
+              "description": "User's avatar URL"
+            },
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
             }
           },
-          "example": [
-            { "email": "1@gmail.com", "userId": "1" },
-            { "email": "2@gmail.com", "userId": "2" }
-          ]
+          "example": {
+            "name": "Alex",
+            "email": "user@example.com",
+            "avatarURL": "https://example.com/avatar1.jpg"
+          }
+        }
+      }
+    },
+    "CurrentResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "User's name"
+            },
+            "avatarURL": {
+              "type": "string",
+              "description": "User's avatar URL"
+            },
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            }
+          },
+          "example": {
+            "name": "Alex",
+            "email": "user@example.com",
+            "avatarURL": "https://example.com/avatar1.jpg"
+          }
+        }
+      }
+    },
+    "LogoutResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Logout succes"
         }
       },
-      "securitySchemes": {
-        "Bearer": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
+      "example": {
+        "message": "Logout succes"
+      }
+    },
+    "UpdateRequestMultipart": {
+      "type": "object",
+      "properties": {
+        "avatar": {
+          "type": "string",
+          "format": "binary"
+        },
+        "name": {
+          "type": "string"
         }
+      },
+      "example": {
+        "avatar": "<binary_data>",
+        "name": "New Username"
+      }
+    },
+    "UpdateResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Username updated"
+            },
+            "avatarURL": {
+              "type": "string",
+              "description": "User avatar URL updated"
+            }
+          },
+          "example": {
+            "name": "username or upload-username",
+            "avatarURL": "https://example.com/update-avatar1.jpg"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
+}
