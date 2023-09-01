@@ -26,6 +26,8 @@ const shape = {
     type: String,
     required: true,
     minlength: password.min,
+    maxLength: password.max,
+    match: [password.pattern, password.mesage],
   },
 
   token: {
@@ -43,10 +45,10 @@ const shape = {
     default: false,
   },
 
-    subscription: {
-      type: String,
-      default: "",
-    },
+  subscription: {
+    type: String,
+    default: '',
+  },
 
   verificationToken: {
     type: String,

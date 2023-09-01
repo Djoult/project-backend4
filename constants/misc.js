@@ -9,3 +9,4 @@ export const ABOUT_MAX_LEN = 350;
 export const INSTRUCTIONS_MAX_LEN = 2500;
 export const MEASURE_MIN = 3;
 export const PASSWORD_MIN = 6;
+export const PASSWORD_MAX = 16;
