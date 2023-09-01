@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import fs from 'fs/promises';
 
 export const isStr = v => typeof v === 'string';
 export const isFunc = v => typeof v === 'function';
@@ -75,4 +76,21 @@ export const getRandomElements = (arr, count) => {
 export const capitalize = (s, allWords = true) => {
   const re = RegExp('(?<=\\s|^)\\w', allWords ? 'g' : '');
   return s.replace(re, m => m.toLocaleUpperCase());
+};
+
+export const checkFileExists = async path => {
+  try {
+    (await fs.stat(path)).isFile();
+  } catch (err) {
+    if (err.code === 'ENOENT') throw err;
+  }
+};
+
+export const isFileExists = async path => {
+  try {
+    await checkFileExists(file.path);
+    return true;
+  } catch {
+    return false;
+  }
 };

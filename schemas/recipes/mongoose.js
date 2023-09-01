@@ -122,15 +122,6 @@ setMongooseShapeReserved(shape, reservedFields);
 const schemaOptions = {
   versionKey: false,
   timestamps: true,
-  // toObject: {
-  //   getters: true,
-  //   setters: true,
-  // },
-  // toJSON: {
-  //   getters: true,
-  //   setters: true,
-  // },
-  // runSettersOnQuery: true,
 };
 
 export const schema = new Schema(shape, schemaOptions);

@@ -9,6 +9,7 @@ const shape = {
   title: {
     type: String,
     required: true,
+    trim: true,
     match: [titleData.pattern, titleData.message],
     maxLength: titleData.max,
   },
@@ -16,6 +17,7 @@ const shape = {
   measure: {
     type: String,
     required: true,
+    trim: true,
     minLength: measure.min,
     match: [measure.pattern, measure.message],
   },

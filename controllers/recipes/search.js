@@ -21,7 +21,7 @@ import {
 } from '../../helpers/index.js';
 
 export const search = async ({ user, query }, res) => {
-  const { _id: owner } = user ?? '';
+  const { _id: owner } = user;
 
   let {
     page,
@@ -110,6 +110,8 @@ export const search = async ({ user, query }, res) => {
   if (!isEmpty(filter)) {
     pipeline.unshift({ $match: { ...filter } });
   }
+
+  console.log(filter);
 
   // общее кол-во документов, соотвествующих фильтру
   const totalHits = await Recipe.countDocuments({ ...filter });

@@ -3,8 +3,7 @@ import { Recipe } from '../../models/index.js';
 import { HttpError, db } from '../../helpers/index.js';
 
 export const updateFavoriteById = async ({ params: { id }, user }, res) => {
-  // db.makeObjectId('64ed3efd7cac80d8e7730620')
-  const { _id: owner } = user ?? '';
+  const { _id: owner } = user;
 
   const { length: isFavorite } = await Recipe.find({
     _id: db.makeObjectId(id),
@@ -18,5 +17,5 @@ export const updateFavoriteById = async ({ params: { id }, user }, res) => {
   );
 
   if (!result) throw HttpError(HTTP_STATUS.notFound);
-  res.json(result);
+  res.json({ favorite: !isFavorite });
 };

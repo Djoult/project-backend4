@@ -19,14 +19,6 @@ const SORT_ORDER = {
   desc: -1,
 };
 
-/**
- *
- *  - recipes/ingredient-list?
- *      title=..&
- *      page=..&
- *      limit=..&
- *      sort={asc|desc}
- */
 export const getIngredientList = async ({ query }, res) => {
   let { page, limit, title, sort } = query;
 

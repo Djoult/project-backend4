@@ -3,9 +3,9 @@ import { Recipe } from '../../models/index.js';
 import { db, HttpError, recipeAggregationStages } from '../../helpers/index.js';
 
 export const getOwnById = async ({ params: { id }, user }, res) => {
-  const { _id: owner } = user ?? '';
+  const { _id: owner } = user;
 
-  const result = await Recipe.aggregate([
+  const [result] = await Recipe.aggregate([
     {
       $match: {
         owner,

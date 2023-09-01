@@ -1,10 +1,12 @@
-import nodemailer from "nodemailer";
-import "dotenv/config";
+import nodemailer from 'nodemailer';
+import 'dotenv/config';
 
 const { UKR_NET_EMAIL, UKR_NET_PASSWORD } = process.env;
 
+console.log(UKR_NET_EMAIL, UKR_NET_PASSWORD);
+
 const nodemailerConfig = {
-  host: "smtp.ukr.net",
+  host: 'smtp.ukr.net',
   port: 465,
   secure: true,
   auth: {
@@ -15,7 +17,7 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const sendEmail = async (data) => {
+const sendEmail = async data => {
   const email = { ...data, from: UKR_NET_EMAIL };
   return transport.sendMail(email);
 };
