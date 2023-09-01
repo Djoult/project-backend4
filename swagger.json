@@ -216,6 +216,72 @@
           }
         }
       }
+    },
+    "/auth/verify": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VerifyEmailRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operations",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VerifyResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to log in user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -261,131 +327,160 @@
           { "email": "1@gmail.com", "userId": "1" },
           { "email": "2@gmail.com", "userId": "2" }
         ]
-      }
-    },
-    "LoginRequest": {
-      "type": "object",
-      "required": ["email", "password"],
-      "properties": {
-        "email": {
-          "type": "string",
-          "description": "User's email",
-          "format": "email"
-        },
-        "password": {
-          "type": "string",
-          "description": "User's password",
-          "example": "Test123"
-        }
-      }
-    },
-    "LoginResponse": {
-      "type": "object",
-      "properties": {
-        "token": {
-          "type": "string",
-          "description": "Authentication token",
-          "example": "wre35R4y3234.jdrit45fk4OrJ45.235wetKFF3460"
-        },
-        "user": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "User's name"
-            },
-            "avatarURL": {
-              "type": "string",
-              "description": "User's avatar URL"
-            },
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
           },
-          "example": {
-            "name": "Alex",
-            "email": "user@example.com",
-            "avatarURL": "https://example.com/avatar1.jpg"
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "Test123"
           }
         }
-      }
-    },
-    "CurrentResponse": {
-      "type": "object",
-      "properties": {
-        "user": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "User's name"
-            },
-            "avatarURL": {
-              "type": "string",
-              "description": "User's avatar URL"
-            },
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Authentication token",
+            "example": "wre35R4y3234.jdrit45fk4OrJ45.235wetKFF3460"
           },
-          "example": {
-            "name": "Alex",
-            "email": "user@example.com",
-            "avatarURL": "https://example.com/avatar1.jpg"
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's avatar URL"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              }
+            },
+            "example": {
+              "name": "Alex",
+              "email": "user@example.com",
+              "avatarURL": "https://example.com/avatar1.jpg"
+            }
           }
         }
-      }
-    },
-    "LogoutResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "description": "Logout succes"
-        }
       },
-      "example": {
-        "message": "Logout succes"
-      }
-    },
-    "UpdateRequestMultipart": {
-      "type": "object",
-      "properties": {
-        "avatar": {
-          "type": "string",
-          "format": "binary"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "example": {
-        "avatar": "<binary_data>",
-        "name": "New Username"
-      }
-    },
-    "UpdateResponse": {
-      "type": "object",
-      "properties": {
-        "user": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Username updated"
+      "CurrentResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's avatar URL"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              }
             },
-            "avatarURL": {
-              "type": "string",
-              "description": "User avatar URL updated"
+            "example": {
+              "name": "Alex",
+              "email": "user@example.com",
+              "avatarURL": "https://example.com/avatar1.jpg"
             }
+          }
+        }
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Logout succes"
+          }
+        },
+        "example": {
+          "message": "Logout succes"
+        }
+      },
+      "UpdateRequestMultipart": {
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "format": "binary"
           },
-          "example": {
-            "name": "username or upload-username",
-            "avatarURL": "https://example.com/update-avatar1.jpg"
+          "name": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "avatar": "<binary_data>",
+          "name": "New Username"
+        }
+      },
+      "UpdateResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Username updated"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User avatar URL updated"
+              }
+            },
+            "example": {
+              "name": "username or upload-username",
+              "avatarURL": "https://example.com/update-avatar1.jpg"
+            }
+          }
+        }
+      },
+      "VerifyEmailRequest": {
+        "type": "object",
+        "properties": {
+          "verificationCode": {
+            "type": "string",
+            "description": "Verification emailr password",
+            "example": "qwerty1111111"
+          }
+        }
+      },
+      "VerifyResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Email user@email.com verified successfully."
+          },
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "12345678901112"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "User's refreshToken",
+            "example": "12345678901112"
           }
         }
       }
