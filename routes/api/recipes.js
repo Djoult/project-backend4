@@ -33,8 +33,11 @@ router.get('/category-list', ctrl.getCategoryList);
  *      &limit=..
  *      &sort=[asc|desc]
  *
- * Вернет объект, где hits - массив ингредиентов
- * { page, limit, totalHits, hits }
+ * Вернет объект { page, limit, totalHits, hits }, где
+ *    hits - массив ингредиентов,
+ *    totalHits - общее кол-во рецептов, соотвествующих заданным критериям
+ *    page - текущая страница выдачи
+ *    limit - кол-во рецептов на одну страницу
  */
 router.get('/ingredient-list', ctrl.getIngredientList);
 
@@ -120,7 +123,7 @@ router.get('/favorite', ctrl.getFavoriteAll);
  * GET recipes/favorite/:id
  *
  * Вернет объект рецепта(статус 200)
- * или { "message": "Not Found" }(статус 404)
+ * или { message: "Not Found" }(статус 404)
  */
 router.get('/favorite/:id', isValidId, ctrl.getFavoriteById);
 
@@ -132,8 +135,10 @@ router.get('/favorite/:id', isValidId, ctrl.getFavoriteById);
  *
  * PATCH recipes/favorite/:id
  *
- * Вернет объект рецепта после обновления(статус 200)
- * или { "message": "Not Found" }(статус 404)
+ * Вернет
+ * { favorite: true }(статус 200) - рецепт был добавлен в избранные
+ * { favorite: false }(статус 200) - рецепт был дулаен из избранных
+ * { message: "Not Found" }(статус 404) - рецепт с таким id в избранных не найден
  */
 router.patch('/favorite/:id', isValidId, ctrl.updateFavoriteById);
 
@@ -158,7 +163,7 @@ router.get('/own', ctrl.getOwnAll);
  *  GET recipes/own/:id
  *
  * Вернет объект рецепта(статус 200)
- * или { "message": "Not Found" }(статус 404)
+ * или { message: "Not Found" }(статус 404)
  */
 router.get('/own/:id', isValidId, ctrl.getOwnById);
 
@@ -169,8 +174,8 @@ router.get('/own/:id', isValidId, ctrl.getOwnById);
  *
  *  DELETE recipes/own/:id
  *
- * Вернет объект удаленного рецепта(статус 200)
- * или { "message": "Not Found" }(статус 404)
+ * Вернет { message: 'Successfully' }(статус 200)
+ * или { message: "Not Found" }(статус 404)
  */
 router.delete('/own/:id', isValidId, ctrl.removeOwnById);
 
@@ -181,7 +186,7 @@ router.delete('/own/:id', isValidId, ctrl.removeOwnById);
  *  GET recipes/:id
  *
  * Вернет объект рецепта(статус 200)
- * или { "message": "Not Found" }(статус 404)
+ * или { message: "Not Found" }(статус 404)
  */
 router.get('/:id', isValidId, ctrl.getById);
 

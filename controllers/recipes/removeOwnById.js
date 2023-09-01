@@ -11,5 +11,5 @@ export const removeOwnById = async ({ params: { id }, user }, res) => {
   });
 
   if (!result) throw HttpError(HTTP_STATUS.notFound);
-  res.json(result);
+  res.json({ message: 'Successfully' });
 };
