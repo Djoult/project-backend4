@@ -3,8 +3,6 @@ import 'dotenv/config';
 
 const { UKR_NET_EMAIL, UKR_NET_PASSWORD } = process.env;
 
-console.log(UKR_NET_EMAIL, UKR_NET_PASSWORD);
-
 const nodemailerConfig = {
   host: 'smtp.ukr.net',
   port: 465,
