@@ -282,6 +282,117 @@
           }
         }
       }
+    },
+    "/recipes/category-list": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return a categories of recipes",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "sort",
+            "type": "string",
+            "description": "Ascending or descending sorting. Default: asc"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category-list"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/recipes/ingredient-list": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return ingridients that will be in the sample",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "sort",
+            "type": "string",
+            "description": "Ascending or descending sorting. Default: asc"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "title",
+            "type": "string",
+            "description": "Title"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "page",
+            "type": "integer",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "limit",
+            "type": "integer",
+            "description": "Limit"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ingredient-list"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
