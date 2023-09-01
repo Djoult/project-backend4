@@ -1,13 +1,72 @@
 import express from 'express';
-import { validateBody } from '../../decorators/index.js';
-import { isEmptyBody, isValidId } from '../../middlewares/index.js';
+import { validateBody, uploadSingleImage } from '../../decorators/index.js';
 import { joiSchema as schema } from '../../schemas/recipes/index.js';
 import { ctrl } from '../../controllers/recipes/index.js';
 import { isRecipeExists, authenticate } from '../../middlewares/index.js';
 
+import {
+  isEmptyBody,
+  isValidId,
+  processDrinkThumb,
+} from '../../middlewares/index.js';
+
 const router = express.Router();
 
 router.use(authenticate);
+
+/**
+ *
+ * Добавление рецепта
+ *
+ * POST recipes/own
+ */
+router.post(
+  '/own',
+  isEmptyBody,
+  isRecipeExists,
+  uploadSingleImage('drinkThumb'),
+  processDrinkThumb,
+  validateBody(schema.addRecipe),
+  ctrl.add
+  /* removeDrinkThumbOnError */
+);
+
+/**
+ *
+ * Список всех рецептов, которые добавил текущий юзер
+ * (Рецепты, в поле owner которых стоит id текущего юзера)
+ * Возможна фильтрация по тем же полям, что и для recipes/search
+ * (см. пример для recipes/popular)
+ *
+ * GET recipes/own?[фильтры...]
+ *
+ *  Вернет объект, где hits - массив ингредиентов
+ * { page, limit, totalHits, hits }
+ */
+router.get('/own', ctrl.getOwnAll);
+
+/**
+ *
+ * Рецепт по id, добавленный текущим юзером
+ *
+ *  GET recipes/own/:id
+ *
+ * Вернет объект рецепта(статус 200)
+ * или { message: "Not Found" }(статус 404)
+ */
+router.get('/own/:id', isValidId, ctrl.getOwnById);
+
+/**
+ *
+ * Удаляет рецепт по id, добавленный текущим юзером
+ * (в поле owner рецепта должен стоять id текущего юзера)
+ *
+ *  DELETE recipes/own/:id
+ *
+ * Вернет { message: 'Successfully' }(статус 200)
+ * или { message: "Not Found" }(статус 404)
+ */
+router.delete('/own/:id', isValidId, ctrl.removeOwnById);
 
 /**
  *
@@ -144,43 +203,6 @@ router.patch('/favorite/:id', isValidId, ctrl.updateFavoriteById);
 
 /**
  *
- * Список всех рецептов, которые добавил текущий юзер
- * (Рецепты, в поле owner которых стоит id текущего юзера)
- * Возможна фильтрация по тем же полям, что и для recipes/search
- * (см. пример для recipes/popular)
- *
- * GET recipes/own?[фильтры...]
- *
- *  Вернет объект, где hits - массив ингредиентов
- * { page, limit, totalHits, hits }
- */
-router.get('/own', ctrl.getOwnAll);
-
-/**
- *
- * Рецепт по id, добавленный текущим юзером
- *
- *  GET recipes/own/:id
- *
- * Вернет объект рецепта(статус 200)
- * или { message: "Not Found" }(статус 404)
- */
-router.get('/own/:id', isValidId, ctrl.getOwnById);
-
-/**
- *
- * Удаляет рецепт по id, добавленный текущим юзером
- * (в поле owner рецепта должен стоять id текущего юзера)
- *
- *  DELETE recipes/own/:id
- *
- * Вернет { message: 'Successfully' }(статус 200)
- * или { message: "Not Found" }(статус 404)
- */
-router.delete('/own/:id', isValidId, ctrl.removeOwnById);
-
-/**
- *
  * Рецепт по id
  *
  *  GET recipes/:id
@@ -189,19 +211,5 @@ router.delete('/own/:id', isValidId, ctrl.removeOwnById);
  * или { message: "Not Found" }(статус 404)
  */
 router.get('/:id', isValidId, ctrl.getById);
-
-/**
- *
- * Добавление рецепта
- *
- * POST recipes/own
- */
-router.post(
-  '/own',
-  isEmptyBody,
-  isRecipeExists,
-  validateBody(schema.addRecipe),
-  ctrl.add
-);
 
 export default router;
