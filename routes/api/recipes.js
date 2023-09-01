@@ -62,6 +62,7 @@ router.get('/ingredient-list', ctrl.getIngredientList);
  *
  * Вернет массив, где hits - массив случайных рецептов для заданной категории
  * [ { category: ..., hits:[] }, { category: ..., hits:[] } ]
+ * или пустой массив [], если ничего, соотвествующего критериям, не найдено
  */
 router.get('/main-page', ctrl.getMainPageRecipes);
 
