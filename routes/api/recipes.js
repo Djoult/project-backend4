@@ -16,60 +16,6 @@ router.use(authenticate);
 
 /**
  *
- * Добавление рецепта
- *
- * POST recipes/own
- */
-router.post(
-  '/own',
-  isEmptyBody,
-  isRecipeExists,
-  uploadSingleImage('drinkThumb'),
-  processDrinkThumb,
-  validateBody(schema.addRecipe),
-  ctrl.add
-  /* removeDrinkThumbOnError */
-);
-
-/**
- *
- * Список всех рецептов, которые добавил текущий юзер
- * (Рецепты, в поле owner которых стоит id текущего юзера)
- * Возможна фильтрация по тем же полям, что и для recipes/search
- * (см. пример для recipes/popular)
- *
- * GET recipes/own?[фильтры...]
- *
- *  Вернет объект, где hits - массив ингредиентов
- * { page, limit, totalHits, hits }
- */
-router.get('/own', ctrl.getOwnAll);
-
-/**
- *
- * Рецепт по id, добавленный текущим юзером
- *
- *  GET recipes/own/:id
- *
- * Вернет объект рецепта(статус 200)
- * или { message: "Not Found" }(статус 404)
- */
-router.get('/own/:id', isValidId, ctrl.getOwnById);
-
-/**
- *
- * Удаляет рецепт по id, добавленный текущим юзером
- * (в поле owner рецепта должен стоять id текущего юзера)
- *
- *  DELETE recipes/own/:id
- *
- * Вернет { message: 'Successfully' }(статус 200)
- * или { message: "Not Found" }(статус 404)
- */
-router.delete('/own/:id', isValidId, ctrl.removeOwnById);
-
-/**
- *
  * Список всех категорий с возможностью сортировки.
  * По умолчанию сортирует по алфавиту (asc -> ascending)
  *
@@ -196,10 +142,64 @@ router.get('/favorite/:id', isValidId, ctrl.getFavoriteById);
  *
  * Вернет
  * { favorite: true }(статус 200) - рецепт был добавлен в избранные
- * { favorite: false }(статус 200) - рецепт был дулаен из избранных
+ * { favorite: false }(статус 200) - рецепт был удален из избранных
  * { message: "Not Found" }(статус 404) - рецепт с таким id в избранных не найден
  */
 router.patch('/favorite/:id', isValidId, ctrl.updateFavoriteById);
+
+/**
+ *
+ * Добавление рецепта
+ *
+ * POST recipes/own
+ */
+router.post(
+  '/own',
+  isEmptyBody,
+  isRecipeExists,
+  uploadSingleImage('drinkThumb'),
+  processDrinkThumb,
+  validateBody(schema.addRecipe),
+  ctrl.add
+  /* removeDrinkThumbOnError */
+);
+
+/**
+ *
+ * Список всех рецептов, которые добавил текущий юзер
+ * (Рецепты, в поле owner которых стоит id текущего юзера)
+ * Возможна фильтрация по тем же полям, что и для recipes/search
+ * (см. пример для recipes/popular)
+ *
+ * GET recipes/own?[фильтры...]
+ *
+ *  Вернет объект, где hits - массив ингредиентов
+ * { page, limit, totalHits, hits }
+ */
+router.get('/own', ctrl.getOwnAll);
+
+/**
+ *
+ * Рецепт по id, добавленный текущим юзером
+ *
+ *  GET recipes/own/:id
+ *
+ * Вернет объект рецепта(статус 200)
+ * или { message: "Not Found" }(статус 404)
+ */
+router.get('/own/:id', isValidId, ctrl.getOwnById);
+
+/**
+ *
+ * Удаляет рецепт по id, добавленный текущим юзером
+ * (в поле owner рецепта должен стоять id текущего юзера)
+ *
+ *  DELETE recipes/own/:id
+ *
+ * Вернет { message: 'Successfully' }(статус 200)
+ * или { message: "Not Found" }(статус 404)
+ */
+router.delete('/own/:id', isValidId, ctrl.removeOwnById);
 
 /**
  *
