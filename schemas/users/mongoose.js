@@ -25,9 +25,6 @@ const shape = {
   password: {
     type: String,
     required: true,
-    minlength: password.min,
-    maxLength: password.max,
-    match: [password.pattern, ({ path }) => `"${path}": ${password.message}`],
   },
 
   token: {
