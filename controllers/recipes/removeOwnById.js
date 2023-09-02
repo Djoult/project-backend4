@@ -4,9 +4,9 @@ import { HttpError, db, cloudinary } from '../../helpers/index.js';
 import chalk from 'chalk';
 
 const { uploader } = cloudinary;
-const blue = chalk.blueBright;
 
 export const removeOwnById = async ({ params: { id }, user }, res) => {
+  let thumbDeletionResult;
   const { _id: owner } = user;
 
   const result = await Recipe.findOneAndRemove({
@@ -20,9 +20,13 @@ export const removeOwnById = async ({ params: { id }, user }, res) => {
   // удаляем ассоциированную картинку из cloudinary
   if (drinkThumb) {
     const [, thumbId] = drinkThumb.match(/([^\/]+)\.[^\.]+$/);
-    const result = await uploader.destroy(`${CLOUDINARY_THUMB_DIR}/${thumbId}`);
-    console.log(blue('destroy'), thumbId, result);
+    thumbDeletionResult = await uploader.destroy(
+      `${CLOUDINARY_THUMB_DIR}/${thumbId}`
+    );
   }
 
-  res.json({ message: 'Successfully' });
+  res.json({
+    message: 'Successfully',
+    thumbRemoved: thumbDeletionResult.result,
+  });
 };
