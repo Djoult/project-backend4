@@ -12,7 +12,7 @@ import {
 const { TEMP_DIR = 'tmp' } = process.env;
 
 const destination = path.resolve(TEMP_DIR);
-export const MAX_FILE_SIZE = 1024 ** 2 * 5;
+export const MAX_FILE_SIZE = 1024 ** 2 * 5; // 5Mb
 const SUPPORTED_FORMATS = JIMP_SUPPORTED_FORMATS.join(', ');
 const isImageType = mimeType => JIMP_SUPPORTED_MIMETYPES.includes(mimeType);
 

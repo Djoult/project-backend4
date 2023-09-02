@@ -7,12 +7,22 @@ import {
   normalizeStr,
   isInt,
   isPositiveInt,
+  isEmptyObj,
   getRandomElements,
 } from '../../helpers/index.js';
 
 export const getMainPageRecipes = async ({ query }, res) => {
-  let { category, samples, thumb, instructions, categoryCount } =
+  let { category, thumb, instructions, samples, categoryCount } =
     parseRequestQuery(query);
+
+  // по умолчанию берем 3 случайных рецепта с картинкой
+  // из 4-х случайных категорий
+  if (isEmptyObj(query)) {
+    categoryCount = 4;
+    samples = 3;
+    thumb = 'true';
+  }
+
   [thumb, instructions] = normalizeStr(thumb, instructions);
 
   // если задан &categoryCount и &category=.., игнорим последний
@@ -21,24 +31,22 @@ export const getMainPageRecipes = async ({ query }, res) => {
   }
 
   thumb =
-    (thumb === 'true' && { drinkThumb: { $ne: null } }) ||
-    (thumb === 'false' && { drinkThumb: null }) ||
+    (thumb === 'true' && { drinkThumb: { $nin: [null, ''] } }) ||
+    (thumb === 'false' && { drinkThumb: { $in: [null, ''] } }) ||
     null;
 
   instructions =
-    (instructions === 'true' && { instructions: { $ne: null } }) ||
-    (instructions === 'false' && { instructions: null }) ||
+    (instructions === 'true' && { instructions: { $nin: [null, ''] } }) ||
+    (instructions === 'false' && { instructions: { $in: [null, ''] } }) ||
     null;
-
-  const extraFilter = {
-    ...instructions,
-    ...thumb,
-  };
 
   const pipeline = recipeAggregationStages.groupRecipesByCategory(
     category,
     samples,
-    extraFilter
+    {
+      ...instructions,
+      ...thumb,
+    }
   );
 
   const result = await Recipe.aggregate(pipeline);

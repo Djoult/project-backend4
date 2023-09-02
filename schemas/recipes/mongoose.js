@@ -31,7 +31,7 @@ const {
 const title = {
   type: String,
   required: true,
-  match: [titleData.pattern, titleData.message],
+  match: [titleData.pattern, ({ path }) => `"${path}": ${titleData.message}`],
   maxLength: titleData.max,
 };
 
@@ -49,7 +49,10 @@ const shape = {
 
   about: {
     type: String,
-    match: [aboutRecipe.pattern, aboutRecipe.message],
+    match: [
+      aboutRecipe.pattern,
+      ({ path }) => `"${path}": ${aboutRecipe.message}`,
+    ],
     maxLength: aboutRecipe.max,
     default: null,
   },
@@ -63,7 +66,7 @@ const shape = {
           .map(itm => itm.toLocaleLowerCase())
           .includes(v.toLocaleLowerCase());
       },
-      message: ({ value }) => `"${value}": Unknown value`,
+      message: ({ path }) => `"${path}": Unknown value`,
     },
   },
 
@@ -76,20 +79,23 @@ const shape = {
           .map(itm => itm.toLocaleLowerCase())
           .includes(v.toLocaleLowerCase());
       },
-      message: ({ value }) => `"${value}": Unknown value`,
+      message: ({ path }) => `"${path}": Unknown value`,
     },
   },
 
   instructions: {
     type: String,
     required: true,
-    match: [instructions.pattern, instructions.message],
+    match: [
+      instructions.pattern,
+      ({ path }) => `"${path}": ${instructions.message}`,
+    ],
     maxLength: instructions.max,
   },
 
   drinkThumb: {
     type: String,
-    match: [thumb.pattern, thumb.message],
+    match: [thumb.pattern, ({ path }) => `"${path}": ${thumb.message}`],
     default: null,
   },
 

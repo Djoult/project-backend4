@@ -5,7 +5,7 @@ import { HttpError } from '../../helpers/index.js';
 export const uploadSingleImage = fieldName => {
   return (req, res, next) => {
     const handler = uploadImage.single(fieldName);
-    const message = `${fieldName}: file size limit: ${MAX_FILE_SIZE}`;
+    const message = `${fieldName}: maximum allowed file size: ${MAX_FILE_SIZE}`;
 
     // вызываем handler с кастомной обработкой ошибок
     handler(req, res, err => {

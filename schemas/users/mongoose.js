@@ -8,7 +8,7 @@ const shape = {
   name: {
     type: String,
     required: true,
-    match: [name.pattern, name.message],
+    match: [name.pattern, ({ path }) => `"${path}": ${name.message}`],
   },
 
   email: {
@@ -18,7 +18,7 @@ const shape = {
     unique: true,
     validate: {
       validator: email.validator,
-      message: email.message,
+      message: ({ path }) => `"${path}": ${email.message}`,
     },
   },
 
@@ -26,6 +26,8 @@ const shape = {
     type: String,
     required: true,
     minlength: password.min,
+    maxLength: password.max,
+    match: [password.pattern, ({ path }) => `"${path}": ${password.message}`],
   },
 
   token: {
@@ -43,10 +45,10 @@ const shape = {
     default: false,
   },
 
-    subscription: {
-      type: String,
-      default: "",
-    },
+  subscription: {
+    type: String,
+    default: '',
+  },
 
   verificationToken: {
     type: String,

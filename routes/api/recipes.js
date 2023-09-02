@@ -8,6 +8,7 @@ import {
   isEmptyBody,
   isValidId,
   processDrinkThumb,
+  removeDrinkThumbOnError,
 } from '../../middlewares/index.js';
 
 const router = express.Router();
@@ -166,13 +167,13 @@ router.patch('/favorite/:id', isValidId, ctrl.updateFavoriteById);
  */
 router.post(
   '/own',
+  uploadSingleImage('drinkThumb'),
   isEmptyBody,
   isRecipeExists,
-  uploadSingleImage('drinkThumb'),
   processDrinkThumb,
   validateBody(schema.addRecipe),
-  ctrl.add
-  /* removeDrinkThumbOnError */
+  ctrl.add,
+  removeDrinkThumbOnError
 );
 
 /**

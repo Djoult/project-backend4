@@ -18,7 +18,12 @@ const shape = {
     .email({ minDomainSegments: 2 })
     .messages({ '*': `{{#label}}: ${email.message}` }),
 
-  password: Joi.string().required().min(password.min),
+  password: Joi.string()
+    .required()
+    .min(password.min)
+    .max(password.max)
+    .pattern(password.pattern)
+    .messages({ '*': `{{#label}}: ${password.message}` }),
 };
 
 // добавляем trim всем строковым полям

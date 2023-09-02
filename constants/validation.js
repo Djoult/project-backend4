@@ -6,6 +6,7 @@ import {
   INSTRUCTIONS_MAX_LEN,
   MEASURE_MIN,
   PASSWORD_MIN,
+  PASSWORD_MAX,
 } from './misc.js';
 
 const regexp = {
@@ -15,6 +16,7 @@ const regexp = {
   about: /^[a-z0-9][\s\w\.,"']{24,}$/i,
   measure: /^\d+\s*[a-z]+$/i,
   name: /^\s*[A-Z][a-z]+(\s+[A-Z][a-z]+)?\s*$/,
+  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
 };
 
 const title = {
@@ -96,6 +98,13 @@ const userFields = {
 
   password: {
     min: PASSWORD_MIN,
+    max: PASSWORD_MAX,
+    pattern: regexp.password,
+    message: [
+      'Must be 6 to 16 characters long, ',
+      'contain at least one uppercase latin letter ',
+      'and a number',
+    ].join(' '),
   },
 };
 

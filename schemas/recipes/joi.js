@@ -72,8 +72,7 @@ const shape = {
       '*': `{{#label}}: ${instructions.message}`,
     }),
 
-  // !!! TODO: убрать после тестов
-  users: Joi.array(),
+  drinkThumb: Joi.binary().default(null),
 
   ingredients: Joi.array()
     .required()

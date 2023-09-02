@@ -70,7 +70,7 @@ const getCategorySamples = (categoryList, sampleCount, extraFilter) => {
       {
         $match: {
           category: { $regex: RegExp(normalizeStr(categoryName), 'i') },
-          ...extraFilter,
+          // ...extraFilter,
         },
       },
       { $sample: { size: Number(sampleCount) } },
