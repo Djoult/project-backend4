@@ -31,13 +31,13 @@ export const getMainPageRecipes = async ({ query }, res) => {
   }
 
   thumb =
-    (thumb === 'true' && { drinkThumb: { $ne: null } }) ||
-    (thumb === 'false' && { drinkThumb: null }) ||
+    (thumb === 'true' && { drinkThumb: { $nin: [null, ''] } }) ||
+    (thumb === 'false' && { drinkThumb: { $in: [null, ''] } }) ||
     null;
 
   instructions =
-    (instructions === 'true' && { instructions: { $ne: null } }) ||
-    (instructions === 'false' && { instructions: null }) ||
+    (instructions === 'true' && { instructions: { $nin: [null, ''] } }) ||
+    (instructions === 'false' && { instructions: { $in: [null, ''] } }) ||
     null;
 
   const pipeline = recipeAggregationStages.groupRecipesByCategory(

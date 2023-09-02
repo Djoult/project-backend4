@@ -1,6 +1,4 @@
-import cloud from 'cloudinary';
-
-const cloudinary = cloud.v2;
+import { v2 as cloudinary } from 'cloudinary';
 
 const { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } =
   process.env;

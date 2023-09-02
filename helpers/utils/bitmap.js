@@ -16,7 +16,7 @@ import { JIMP_SUPPORTED_EXTNAMES } from '../../constants/index.js';
  *
  * @returns {string} - полное имя к сохраненному изображению
  */
-const resize = async (
+const process = async (
   filePath,
   { width: w, height: h, jpeg: qual, cover, removeOriginal } = {}
 ) => {
@@ -54,6 +54,6 @@ const checkFileFormat = async filePath => {
 };
 
 export const bitmap = {
-  resize,
+  process,
   checkFileFormat,
 };

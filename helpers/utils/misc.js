@@ -92,15 +92,15 @@ export const checkFileExists = async path => {
   try {
     (await fs.stat(path)).isFile();
   } catch (err) {
-    if (err.code === 'ENOENT') throw err;
+    throw err;
+    //if (err.code === 'ENOENT') throw err;
   }
 };
 
-export const isFileExists = async path => {
-  try {
-    await checkFileExists(file.path);
-    return true;
-  } catch {
-    return false;
-  }
-};
+// export const isFileExists = async path => {
+//   try {
+//     await checkFileExists(path);
+//     return true;
+//   } catch {}
+//   return false;
+// };
