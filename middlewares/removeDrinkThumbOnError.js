@@ -1,8 +1,6 @@
 import fs from 'fs/promises';
-import { CLOUDINARY_THUMB_DIR } from '../constants/index.js';
-import { cloudinary } from '../helpers/index.js';
-
-const { uploader } = cloudinary;
+import { CLOUDINARY_THUMBS_DRINK_DIR } from '../constants/index.js';
+import { cloud } from '../helpers/index.js';
 
 export const removeDrinkThumbOnError = async req => {
   const {
@@ -18,8 +16,5 @@ export const removeDrinkThumbOnError = async req => {
   }
 
   // удаляем ассоциированную картинку из cloudinary
-  if (drinkThumb) {
-    const [, thumbId] = drinkThumb.match(/([^\/]+)\.[^\.]+$/);
-    await uploader.destroy(`${CLOUDINARY_THUMB_DIR}/${thumbId}`);
-  }
+  if (drinkThumb) await cloud.destroy(drinkThumb);
 };

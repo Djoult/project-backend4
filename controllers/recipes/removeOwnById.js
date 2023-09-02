@@ -1,9 +1,10 @@
-import { HTTP_STATUS, CLOUDINARY_THUMB_DIR } from '../../constants/index.js';
+import {
+  HTTP_STATUS,
+  CLOUDINARY_THUMBS_DRINK_DIR,
+} from '../../constants/index.js';
 import { Recipe } from '../../models/index.js';
-import { HttpError, db, cloudinary } from '../../helpers/index.js';
+import { HttpError, db, cloud } from '../../helpers/index.js';
 import chalk from 'chalk';
-
-const { uploader } = cloudinary;
 
 export const removeOwnById = async ({ params: { id }, user }, res) => {
   let thumbDeletionResult;
@@ -15,18 +16,13 @@ export const removeOwnById = async ({ params: { id }, user }, res) => {
   });
 
   if (!result) throw HttpError(HTTP_STATUS.notFound);
-  const { drinkThumb } = result;
 
   // удаляем ассоциированную картинку из cloudinary
-  if (drinkThumb) {
-    const [, thumbId] = drinkThumb.match(/([^\/]+)\.[^\.]+$/);
-    thumbDeletionResult = await uploader.destroy(
-      `${CLOUDINARY_THUMB_DIR}/${thumbId}`
-    );
-  }
+  const { drinkThumb } = result;
+  if (drinkThumb) thumbDeletionResult = await cloud.destroy(drinkThumb);
 
   res.json({
     message: 'Successfully',
-    thumbRemoved: thumbDeletionResult.result,
+    thumbRemoved: thumbDeletionResult?.result,
   });
 };
