@@ -15,6 +15,7 @@ try {
   console.log('Database connection successful');
 
   console.log(blue('\nSrarting server...'));
+  
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}\nMode: ${app.get('env')}`);
   });
