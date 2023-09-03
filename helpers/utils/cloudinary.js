@@ -1,4 +1,5 @@
 import { v2 as _cloudinary } from 'cloudinary';
+import { REGEX_CLOUDINARY_PUBLIC_ID } from '../../constants/index.js';
 
 const { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } =
   process.env;
@@ -25,7 +26,7 @@ const upload = async (
 
 const destroy = async (path, options = { invalidate: true }) => {
   // берем путь к файлу в качестве id
-  const [, thumbId] = path.match(/\/v\d+\/(.+)\.[^\.]+$/);
+  const [, thumbId] = path.match(REGEX_CLOUDINARY_PUBLIC_ID);
   return await uploader.destroy(thumbId, options);
 };
 

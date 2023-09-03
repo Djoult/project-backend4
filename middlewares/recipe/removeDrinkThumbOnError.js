@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
-import { CLOUDINARY_THUMBS_DRINK_DIR } from '../constants/index.js';
-import { cloud } from '../helpers/index.js';
+import { CLOUDINARY_THUMBS_DRINK_DIR } from '../../constants/index.js';
+import { cloud } from '../../helpers/index.js';
 
 export const removeDrinkThumbOnError = async ({ file, body }) => {
   const { drinkThumb } = body;
