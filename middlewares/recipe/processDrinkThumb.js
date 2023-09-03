@@ -25,6 +25,8 @@ const bitmapOpts = {
 };
 
 export const processDrinkThumb = async ({ body, file }, res, next) => {
+  if (!file) return next();
+
   // проверяем наличие файла
   if (file) checkFileExists(file.path);
 
