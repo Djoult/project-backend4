@@ -6,9 +6,16 @@ import {
   HTTP_STATUS,
   JIMP_SUPPORTED_EXTNAMES,
   CLOUDINARY_THUMBS_DRINK_DIR,
-} from '../constants/index.js';
+} from '../../constants/index.js';
 
-import { bitmap, checkFileExists, cloud, HttpError } from '../helpers/index.js';
+import {
+  bitmap,
+  checkFileExists,
+  cloud,
+  HttpError,
+} from '../../helpers/index.js';
+
+const ERR_BAD_BITMAP = fieldname => `${fieldname}: possible broken bitmap`;
 
 const bitmapOpts = {
   width: 1200,
@@ -26,10 +33,7 @@ export const processDrinkThumb = async ({ body, file }, res, next) => {
     // Если расширение изменилось, запоминаем новый путь
     file.newPath = await bitmap.process(file.path, bitmapOpts);
   } catch {
-    throw HttpError(
-      HTTP_STATUS.unprocContent,
-      `${file.fieldname}: possible broken bitmap`
-    );
+    throw HttpError(HTTP_STATUS.unprocContent, ERR_BAD_BITMAP(file.fieldname));
   }
 
   // перемещаем файл в облачное хранилище

@@ -1,6 +1,6 @@
-import { HttpError } from '../helpers/index.js';
-import { HTTP_STATUS } from '../constants/index.js';
-import { User } from '../models/index.js';
+import { HttpError } from '../../helpers/index.js';
+import { HTTP_STATUS } from '../../constants/index.js';
+import { User } from '../../models/index.js';
 
 const ERR_ALREADY_EXISTS = 'User with same email is already exists';
 
