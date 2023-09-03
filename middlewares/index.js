@@ -1,11 +1,11 @@
 import { ctrlWrapper } from '../decorators/index.js';
 import { authenticate as auth } from './authenticate.js';
 import { isEmptyBody as _isEmptyBody } from './isEmptyBody.js';
-import { isRecipeExists as _isRecipeExists } from './isRecipeExists.js';
+import { isRecipeExists as _isRecipeExists } from './recipe/isRecipeExists.js';
 import { isValidId as _isValidId } from './isValidId.js';
-import { isUserExists as _isUserExists } from './isUserExists.js';
-import { processDrinkThumb as processThumb } from './processDrinkThumb.js';
-import { removeDrinkThumbOnError as removeThumbOnError } from './removeDrinkThumbOnError.js';
+import { isUserExists as _isUserExists } from './recipe/isUserExists.js';
+import { processDrinkThumb as processThumb } from './recipe/processDrinkThumb.js';
+import { removeDrinkThumbOnError as removeThumbOnError } from './recipe/removeDrinkThumbOnError.js';
 import { handleError } from '../decorators/handleError.js';
 
 export { default as upload } from './upload.js';
