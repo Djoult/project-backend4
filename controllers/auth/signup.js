@@ -3,11 +3,10 @@ import { HttpError, sendEmail } from '../../helpers/index.js';
 import bcrypt from 'bcryptjs';
 import 'dotenv/config';
 import { nanoid } from 'nanoid';
+import { PASSWORD_MAX, PASSWORD_MIN } from '../../constants/misc.js';
 
 const singUp = async (req, res) => {
   const { name, email, password } = req.body;
-
-  console.log('name: ', name);
 
   const user = await User.findOne({ email });
   if (user) {
@@ -15,7 +14,6 @@ const singUp = async (req, res) => {
   }
 
   const verificationToken = nanoid();
-  console.log('verificationToken: ', verificationToken);
 
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
