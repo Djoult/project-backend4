@@ -20,8 +20,8 @@ authRouter.post(
 );
 
 authRouter.patch(
-  '/avatars',
-  upload.single('avatar'),
+  '/update',
+  upload.single('file'),
   authenticate,
   authController.updateUser
 );

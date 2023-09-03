@@ -25,6 +25,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+app.use("/public/avatars", express.static("/public/avatars"));
+
 app.use('/api', miscRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);

@@ -9,9 +9,7 @@ const getCurrent = async(req, res) => {
     throw HttpError(404, "User not found");
   }
 
-  console.log(user);
-
-  res.json({ email: user.email, name: user.name, avatarUrl: user.avatarURL});
+  res.json({ email: user.email, name: user.name, avatarUrl: user.avatarUrl});
 };
 
 export default getCurrent;
