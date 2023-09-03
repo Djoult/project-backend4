@@ -174,7 +174,7 @@
         }
       }
     },
-    "/auth/avatars": {
+    "/auth/update": {
       "patch": {
         "tags": ["Auth"],
         "summary": "Return uploaded avatarURL/name",
@@ -219,7 +219,7 @@
     },
     "/auth/verify": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
         "requestBody": {
@@ -393,7 +393,578 @@
           }
         }
       }
+    },
+    "/recipes/main-page": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return list of recipes of given categories for the main page",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "category",
+            "type": "string",
+            "description": "Category"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "samples",
+            "type": "integer",
+            "description": "Samples"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "categoryCount",
+            "type": "integer",
+            "description": "Category Count"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "thumb",
+            "type": "boolean",
+            "description": "Thumb"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "instructions",
+            "type": "boolean",
+            "description": "Instructions"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MainPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/recipes/search": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return search by specified criteria with the ability to sort by one field",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "drink",
+            "type": "string",
+            "description": "Drink"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "category",
+            "type": "string",
+            "description": "Category"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "ingredient",
+            "type": "string",
+            "description": "Ingredient"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "glass",
+            "type": "string",
+            "description": "Glass"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "page",
+            "type": "integer",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "limit",
+            "type": "integer",
+            "description": "Limit"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "own",
+            "type": "boolean",
+            "description": "Own"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "favorite",
+            "type": "boolean",
+            "description": "Favorite"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "thumb",
+            "type": "boolean",
+            "description": "Thumb"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "instructions",
+            "type": "boolean",
+            "description": "Instructions"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "sort",
+            "type": "string",
+            "description": "Sort"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Search"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/recipes/popular": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return list of recipes added by users to favorites",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "ingredient",
+            "type": "string",
+            "description": "Ingredient"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "category",
+            "type": "string",
+            "description": "Category"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Popular"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/recipes/favorite": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return list of recipes that the current user has added to favorites",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "ingredient",
+            "type": "string",
+            "description": "Ingredient"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "category",
+            "type": "string",
+            "description": "Category"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Popular"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/recipes/favorite/{id}": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return recipe by id, which is added to favorites by the current user",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string",
+						"description": "Enter ID of recipe"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteById"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Recipes"],
+        "summary": "return adds/removes a recipe with the given id to favorites",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string",
+						"description": "Enter ID of recipe"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteById"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "recipes/own": {
+			"get": {
+				"tags": ["Recipes"],
+				"summary": "return list of all recipes added by the current user",
+				"security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "ingredient",
+            "type": "string",
+            "description": "Ingredient"
+          },
+          {
+            "in": "query",
+            "required": false,
+            "name": "category",
+            "type": "string",
+            "description": "Category"
+          }
+        ],
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnAll"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					},
+
+					"500": {
+						"description": "Server error",
+						"content": {}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Recipes"],
+				"summary": "return",
+				"security": [{ "Bearer": [] }],
+				"parameters": [],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"required": [
+								"drink",
+								"category",
+								"glass",
+								"instructions",
+								"ingredients"
+							],
+							"schema": {
+								"$ref": "#/components/schemas/My-recipe"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Recipe added successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/My-recipe-Response"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					},
+
+					"409": {
+						"description": "Name of drink already exists",
+						"content": {}
+					},
+
+					"500": {
+						"description": "Server error",
+						"content": {}
+					}
+				}
+			}
+		},
+    "/recipes/own/{id}": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "return recipe by id added by the current user",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string",
+						"description": "Get own recipe by id"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOwnById"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+			"delete": {
+				"tags": ["Recipes"],
+				"summary": "return removes a recipe by id added by the current user",
+				"security": [{ "Bearer": [] }],
+
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string",
+						"description": "ID of the recipe to be removed"
+					}
+				],
+
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RemoveOwnById"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					},
+
+					"500": {
+						"description": "Server error",
+						"content": {}
+					}
+				}
+			}
     }
+
   },
   "components": {
     "schemas": {
