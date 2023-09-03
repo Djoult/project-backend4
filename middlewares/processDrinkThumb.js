@@ -5,18 +5,11 @@ import fs from 'fs/promises';
 import {
   HTTP_STATUS,
   JIMP_SUPPORTED_EXTNAMES,
-  CLOUDINARY_THUMB_DIR,
+  CLOUDINARY_THUMBS_DRINK_DIR,
 } from '../constants/index.js';
 
-import {
-  bitmap,
-  checkFileExists,
-  cloudinary,
-  HttpError,
-  uuid,
-} from '../helpers/index.js';
+import { bitmap, checkFileExists, cloud, HttpError } from '../helpers/index.js';
 
-const { uploader } = cloudinary;
 const bitmapOpts = {
   width: 1200,
   height: 1200,
@@ -24,9 +17,7 @@ const bitmapOpts = {
   cover: true,
 };
 
-export const processDrinkThumb = async (req, res, next) => {
-  const { body, file = '' } = req;
-
+export const processDrinkThumb = async ({ body, file }, res, next) => {
   // проверяем наличие файла
   if (file) checkFileExists(file.path);
 
@@ -41,18 +32,15 @@ export const processDrinkThumb = async (req, res, next) => {
     );
   }
 
-  // перемещаем файл в облачное хранилище,
-  // в ка-ве publicId используем путь к файлу
-  const { secure_url } = await uploader.upload(file.newPath, {
-    folder: CLOUDINARY_THUMB_DIR,
-    use_filename: true,
-  });
+  // перемещаем файл в облачное хранилище
+  // передаем ссылку на сохраненный файл транзитом дальше
+  body.drinkThumb = await cloud.upload(
+    file.newPath,
+    CLOUDINARY_THUMBS_DRINK_DIR
+  );
 
   // удаляем временный файл
   await fs.unlink(file.newPath);
-
-  // передаем ссылку на сохраненный файл транзитом дальше
-  body.drinkThumb = secure_url;
 
   next();
 };

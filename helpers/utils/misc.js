@@ -96,11 +96,3 @@ export const checkFileExists = async path => {
     //if (err.code === 'ENOENT') throw err;
   }
 };
-
-// export const isFileExists = async path => {
-//   try {
-//     await checkFileExists(path);
-//     return true;
-//   } catch {}
-//   return false;
-// };
