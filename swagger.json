@@ -823,7 +823,7 @@
 			},
 			"post": {
 				"tags": ["Recipes"],
-				"summary": "return",
+				"summary": "adding own recipe",
 				"security": [{ "Bearer": [] }],
 				"parameters": [],
 				"requestBody": {
@@ -924,7 +924,7 @@
       },
 			"delete": {
 				"tags": ["Recipes"],
-				"summary": "return removes a recipe by id added by the current user",
+				"summary": "removes a recipe by id added by the current user",
 				"security": [{ "Bearer": [] }],
 
 				"parameters": [
