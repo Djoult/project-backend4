@@ -31,7 +31,7 @@ const singIn = async (req, res) => {
 
   res.status(201).json({
     token,
-    user: { email: user.email },
+    user: { email: user.email, name: user.name },
   });
 };
 
