@@ -75,7 +75,7 @@ export const search = async ({ user, query }, res) => {
     (own === 'false' && { owner: { $ne: owner } });
 
   favorite =
-    (favorite === 'true' && { users: { $nin: [owner] } }) ||
+    (favorite === 'true' && { users: { $in: [owner] } }) ||
     (favorite === 'false' && { users: { $nin: [owner] } });
 
   thumb =
