@@ -34,6 +34,7 @@ const title = Joi.string()
   .max(titleData.max)
   .messages({ '*': `{{#label}}: ${titleData.message}` });
 
+//
 // const thumb = Joi.string()
 //   .required()
 //   .pattern(thumbData.pattern)

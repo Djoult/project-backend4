@@ -50,7 +50,6 @@ export const search = async ({ user, query }, res) => {
 
   //
   // сортировка в конец (после lookup)
-  // TODO: можно добавить сортировку по нескольким
   //
 
   let { fieldName: sortFieldName, order } = parseSortQueryParam(sort);

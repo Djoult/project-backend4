@@ -104,6 +104,7 @@ const shape = {
     required: true,
   },
 
+  //
   // массив id тех, кто добавил рецепт в favorites
   users: {
     type: [userRef],
