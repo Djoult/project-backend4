@@ -114,10 +114,6 @@ const shape = {
     ...userRef,
     required: true,
   },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
 };
 
 // добавляем { trim: true } всем текстовым полям

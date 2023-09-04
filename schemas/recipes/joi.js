@@ -85,7 +85,7 @@ const shape = {
         .min(measure.min)
         .messages({ '*': `{{#label}}: ${measure.message}` }),
     }),
-    favorite: Joi.boolean(),
+  favorite: Joi.boolean(),
 };
 
 // добавляем trim() всем текстовым полям
@@ -94,13 +94,6 @@ setJoiShapeTrimAll(shape);
 // ставим зарезервированные поля в null
 setJoiShapeReserved(shape, reservedFields);
 
-const recipeUpdateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required().messages({
-    "any.required": "missing field favorite",
-  })
-});
-
 export const schema = {
   addRecipe: Joi.object(shape),
-  recipeUpdateFavoriteSchema,
 };
