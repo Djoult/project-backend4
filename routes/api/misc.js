@@ -10,10 +10,8 @@ import {
 
 const router = express.Router();
 
-router.use(authenticate);
-
 // список тары
 // recipes/glass?sort={asc|desc}
-router.get('/glass', ctrl.getGlassList);
+router.get('/glass', authenticate, ctrl.getGlassList);
 
 export default router;
