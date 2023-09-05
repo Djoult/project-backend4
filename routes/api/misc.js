@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.use(authenticate);
+// router.use(authenticate);
 
 // список тары
 // recipes/glass?sort={asc|desc}
