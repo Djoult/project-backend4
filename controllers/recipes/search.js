@@ -18,6 +18,7 @@ import {
   parseRequestQuery,
   isNonEmptyArray,
   fitIntoRange,
+  isPositiveInt,
 } from '../../helpers/index.js';
 
 export const search = async ({ user, query }, res) => {
@@ -30,11 +31,13 @@ export const search = async ({ user, query }, res) => {
     category,
     ingredient,
     instructions,
+    samples,
     own,
     favorite,
     sort,
     glass,
     thumb,
+    video,
   } = parseRequestQuery(query);
 
   const { lookupIngredients } = recipeAggregationStages;
@@ -63,11 +66,12 @@ export const search = async ({ user, query }, res) => {
   // фильтрация (в начало конвеера)
   //
 
-  [favorite, own, thumb, instructions] = normalizeStr(
+  [favorite, own, thumb, instructions, video] = normalizeStr(
     favorite,
     own,
     thumb,
-    instructions
+    instructions,
+    video
   );
 
   own =
@@ -81,6 +85,11 @@ export const search = async ({ user, query }, res) => {
   thumb =
     (thumb === 'true' && { drinkThumb: { $nin: [null, ''] } }) ||
     (thumb === 'false' && { drinkThumb: { $in: [null, ''] } }) ||
+    null;
+
+  video =
+    (video === 'true' && { video: { $nin: [null, ''] } }) ||
+    (video === 'false' && { video: { $in: [null, ''] } }) ||
     null;
 
   instructions =
@@ -97,6 +106,7 @@ export const search = async ({ user, query }, res) => {
     ...favorite,
     ...instructions,
     ...thumb,
+    ...video,
   };
 
   if (sortFieldName) {
@@ -111,16 +121,20 @@ export const search = async ({ user, query }, res) => {
     pipeline.unshift({ $match: { ...filter } });
   }
 
-  console.log(filter);
+  // кол-во рандомных
+  if (isPositiveInt(samples)) {
+    pipeline.unshift({ $sample: { size: Number(samples) } });
+  }
 
   // общее кол-во документов, соотвествующих фильтру
+  // TODO: лучше сделать в самом конвеере
   const totalHits = await Recipe.countDocuments({ ...filter });
   const hits = await Recipe.aggregate(pipeline);
 
   res.json({
+    totalHits: Math.min(totalHits, samples) || totalHits,
     page,
     limit,
-    totalHits,
     hits,
   });
 };
