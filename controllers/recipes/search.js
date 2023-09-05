@@ -109,6 +109,13 @@ export const search = async ({ user, query }, res) => {
     ...video,
   };
 
+  // кол-во рандомных, ставим после фильтра
+  // Иначе, найдет, например, 3 рандомных без видео
+  // И если задан фильтр search?video - запрос не сработает как надо
+  if (isPositiveInt(samples)) {
+    pipeline.unshift({ $sample: { size: Number(samples) } });
+  }
+
   if (sortFieldName) {
     // если указано поле для сортировки, делаем выборку только тех,
     // у кого есть такое поле (например, users только у новых рецептов)
@@ -119,11 +126,6 @@ export const search = async ({ user, query }, res) => {
 
   if (!isEmpty(filter)) {
     pipeline.unshift({ $match: { ...filter } });
-  }
-
-  // кол-во рандомных
-  if (isPositiveInt(samples)) {
-    pipeline.unshift({ $sample: { size: Number(samples) } });
   }
 
   // общее кол-во документов, соотвествующих фильтру
