@@ -7,7 +7,7 @@ import {
   authRouter,
   recipesRouter,
   miscRouter,
-  subscriptionRouter,
+  router,
 } from './routes/api/index.js';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
@@ -15,6 +15,7 @@ import { readFile } from 'fs/promises';
 const swaggerDocument = JSON.parse(
   await readFile(new URL('./swagger.json', import.meta.url))
 );
+let jsonParser = bodyParser.json();
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.use('/api', miscRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
 
-app.use('/api/subscriptions', subscriptionRouter); //роут на підписку і відписку
+app.use('/api/subscriptions', jsonParser, router); //роут на підписку і відписку
 app.use(
   "/api-docs",
   swaggerUi.serve,

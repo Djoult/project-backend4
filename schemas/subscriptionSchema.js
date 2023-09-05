@@ -1,9 +1,15 @@
-import { Schema } from "mongoose";
+// import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+// dotenv.config();
+// mongoose.createConnection(process.env.DB_HOST, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// });
+
 
 // Створення схеми 
-const subscriptionSchema = new Schema({
-  email_address: String,
-  subscribed: { type: Boolean, default: true },
+const subscriptionSchema = new mongoose.Schema({
+  email: String,
 });
 
 export default subscriptionSchema;
