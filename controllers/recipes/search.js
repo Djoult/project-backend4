@@ -43,28 +43,17 @@ export const search = async ({ user, query }, res) => {
   const { lookupIngredients } = recipeAggregationStages;
   const pipeline = [...lookupIngredients()];
 
-  //
-  // пагинация
-  //
-
   page = parseInt(page) || DEF_PAGE;
   limit = fitIntoRange(limit, 0, MAX_LIMIT, DEF_LIMIT);
   pipeline.unshift({ $limit: limit }, { $skip: (page - 1) * limit });
 
-  //
   // сортировка в конец (после lookup)
   // TODO: можно добавить сортировку по нескольким
-  //
-
   let { fieldName: sortFieldName, order } = parseSortQueryParam(sort);
   if (sortFieldName) {
     if (sortFieldName === 'popularity') sortFieldName = 'users';
     pipeline.push({ $sort: { [sortFieldName]: order } });
   }
-
-  //
-  // фильтрация (в начало конвеера)
-  //
 
   [favorite, own, thumb, instructions, video] = normalizeStr(
     favorite,
@@ -120,10 +109,11 @@ export const search = async ({ user, query }, res) => {
     // если указано поле для сортировки, делаем выборку только тех,
     // у кого есть такое поле (например, users только у новых рецептов)
     // Без $and, если в фильтре есть поле с именем как у сортируемого -
-    // его значение будет переписано значением { $exists: true }
+    // его значение будет переписано значением { $exists: ... }
     filter = { $and: [filter, { [sortFieldName]: { $exists: true } }] };
   }
 
+  // фильтрация (в начало конвеера)
   if (!isEmpty(filter)) {
     pipeline.unshift({ $match: { ...filter } });
   }
