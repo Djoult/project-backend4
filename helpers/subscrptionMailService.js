@@ -1,14 +1,11 @@
 import schedule from 'node-schedule';
 import mail from 'nodemailer';
 import 'dotenv/config';
-import fs from 'fs/promises';
-import { replaceHTML } from '../helpers/subscripionHelper.js';
 import Subscription from '../models/subscription.js';
 
 export const mailer = async function (title, obj) {	
     try {
-        let email = await fs.readFile('../templates/mail.html', { encoding:'utf-8' } );
-        let text = replaceHTML(email, obj);
+        let emailContent = 'This is the text content of your email'; 
         let transporter = mail.createTransport({
             host: process.env.BASE_URL,
             port: process.env.PORT,
@@ -38,8 +35,8 @@ export const mailer = async function (title, obj) {
                     to: item.email,
                     subject: title,
                     replyTo: process.env.UKR_NET_EMAIL,
-                    headers: { 'Mime-Version': '1.0', 'X-Priority': '3', 'Content-type': 'text/html; charset=iso-8859-1' },
-                    html: text
+                    // headers: { 'Mime-Version': '1.0', 'X-Priority': '3', 'Content-type': 'text/html; charset=iso-8859-1' },
+                     text: emailContent
                 }, (err, info) => {
                     if (err !== null) {
                         console.log(err);
@@ -61,7 +58,7 @@ export const mailer = async function (title, obj) {
 schedule.scheduleJob('00 30 10 * * 1', async function() {
     try {
         mailer(`This is our Subscription Email`, {
-            'content' : "Hello, welcome to our Subscription email 👋"
+            'content' : "Hello, welcome from our Subscription email 👋"
         });
     } catch(e) {
         console.log(e);
