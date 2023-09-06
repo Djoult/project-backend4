@@ -7,7 +7,6 @@ import 'dotenv/config';
 const { JWT_SECRET_KEY } = process.env;
 
 const signIn = async (req, res) => {
-  console.log('signIn');
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
