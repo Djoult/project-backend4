@@ -18,6 +18,7 @@ import {
   parseRequestQuery,
   isNonEmptyArray,
   fitIntoRange,
+  isPositiveInt,
 } from '../../helpers/index.js';
 
 export const search = async ({ user, query }, res) => {
@@ -30,44 +31,36 @@ export const search = async ({ user, query }, res) => {
     category,
     ingredient,
     instructions,
+    samples,
     own,
     favorite,
     sort,
     glass,
     thumb,
+    video,
   } = parseRequestQuery(query);
 
   const { lookupIngredients } = recipeAggregationStages;
   const pipeline = [...lookupIngredients()];
 
-  //
-  // пагинация
-  //
-
   page = parseInt(page) || DEF_PAGE;
   limit = fitIntoRange(limit, 0, MAX_LIMIT, DEF_LIMIT);
   pipeline.unshift({ $limit: limit }, { $skip: (page - 1) * limit });
 
-  //
   // сортировка в конец (после lookup)
   // TODO: можно добавить сортировку по нескольким
-  //
-
   let { fieldName: sortFieldName, order } = parseSortQueryParam(sort);
   if (sortFieldName) {
     if (sortFieldName === 'popularity') sortFieldName = 'users';
     pipeline.push({ $sort: { [sortFieldName]: order } });
   }
 
-  //
-  // фильтрация (в начало конвеера)
-  //
-
-  [favorite, own, thumb, instructions] = normalizeStr(
+  [favorite, own, thumb, instructions, video] = normalizeStr(
     favorite,
     own,
     thumb,
-    instructions
+    instructions,
+    video
   );
 
   own =
@@ -81,6 +74,11 @@ export const search = async ({ user, query }, res) => {
   thumb =
     (thumb === 'true' && { drinkThumb: { $nin: [null, ''] } }) ||
     (thumb === 'false' && { drinkThumb: { $in: [null, ''] } }) ||
+    null;
+
+  video =
+    (video === 'true' && { video: { $nin: [null, ''] } }) ||
+    (video === 'false' && { video: { $in: [null, ''] } }) ||
     null;
 
   instructions =
@@ -97,30 +95,38 @@ export const search = async ({ user, query }, res) => {
     ...favorite,
     ...instructions,
     ...thumb,
+    ...video,
   };
+
+  // кол-во рандомных, ставим после фильтра
+  // Иначе, найдет, например, 3 рандомных без видео
+  // И если задан фильтр search?video - запрос не сработает как надо
+  if (isPositiveInt(samples)) {
+    pipeline.unshift({ $sample: { size: Number(samples) } });
+  }
 
   if (sortFieldName) {
     // если указано поле для сортировки, делаем выборку только тех,
     // у кого есть такое поле (например, users только у новых рецептов)
     // Без $and, если в фильтре есть поле с именем как у сортируемого -
-    // его значение будет переписано значением { $exists: true }
+    // его значение будет переписано значением { $exists: ... }
     filter = { $and: [filter, { [sortFieldName]: { $exists: true } }] };
   }
 
+  // фильтрация (в начало конвеера)
   if (!isEmpty(filter)) {
     pipeline.unshift({ $match: { ...filter } });
   }
 
-  console.log(filter);
-
   // общее кол-во документов, соотвествующих фильтру
+  // TODO: лучше сделать в самом конвеере
   const totalHits = await Recipe.countDocuments({ ...filter });
   const hits = await Recipe.aggregate(pipeline);
 
   res.json({
+    totalHits: Math.min(totalHits, samples) || totalHits,
     page,
     limit,
-    totalHits,
     hits,
   });
 };

@@ -2,7 +2,7 @@ import schedule from 'node-schedule';
 import mail from 'nodemailer';
 import 'dotenv/config';
 import fs from 'fs/promises';
-import { replaceHTML } from '../helpers/subscripionHelper.js'
+import { replaceHTML } from '../helpers/subscripionHelper.js';
 import Subscription from '../models/subscription.js';
 
 export const mailer = async function (title, obj) {	
@@ -56,6 +56,7 @@ export const mailer = async function (title, obj) {
     }
 }
 
+
 // Run the CronJob
 schedule.scheduleJob('00 30 10 * * 1', async function() {
     try {
@@ -66,3 +67,4 @@ schedule.scheduleJob('00 30 10 * * 1', async function() {
         console.log(e);
     }
 });
+
