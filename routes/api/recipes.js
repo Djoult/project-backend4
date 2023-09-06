@@ -27,7 +27,7 @@ router.use(authenticate);
  * Вернет массив имен категорий
  * [ "Beer", "Cocktail",... ]
  */
-router.get('/category-list', ctrl.getCategoryList);
+router.get('/category-list', authenticate, ctrl.getCategoryList);
 
 /**
  *
