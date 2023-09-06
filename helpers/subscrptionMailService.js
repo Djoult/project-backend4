@@ -53,6 +53,7 @@ export const mailer = async function (title, obj) {
     }
 }
 
+
 // Run the CronJob
 schedule.scheduleJob('00 30 10 * * 1', async function() {
     try {
@@ -63,3 +64,4 @@ schedule.scheduleJob('00 30 10 * * 1', async function() {
         console.log(e);
     }
 });
+
