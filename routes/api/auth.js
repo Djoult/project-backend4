@@ -10,13 +10,13 @@ const authRouter = express.Router();
 authRouter.post(
   '/signup',
   validateBody(joiSchema.signup),
-  authController.singUp
+  authController.signUp
 );
 
 authRouter.post(
   '/signin',
   validateBody(joiSchema.signin),
-  authController.singIn
+  authController.signIn
 );
 
 authRouter.patch(
