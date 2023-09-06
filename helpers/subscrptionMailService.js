@@ -24,19 +24,24 @@ export const mailer = async function (title, obj) {
             }
         });
 
-        let allSubs = await Subscription.find();
+       let allSubs = await Subscription.find();
 
-        allSubs.forEach(function(item) {
-            if(typeof item.email !== "undefined") {
+        if (allSubs.length === 0) {
+            // Відправляємо відповідь, яка позначає відсутність підписок
+            return res.status(404).json({ message: 'No subscriptions found in the database' });
+        }
+
+        allSubs.forEach(async function (item) {
+            if (typeof item.email !== "undefined") {
                 transporter.sendMail({
-                    from   : `${process.env.UKR_NET_EMAIL} <${process.env.UKR_NET_EMAIL}>`,
-                    to     : item.email,
+                    from: `${process.env.UKR_NET_EMAIL} <${process.env.UKR_NET_EMAIL}>`,
+                    to: item.email,
                     subject: title,
                     replyTo: process.env.UKR_NET_EMAIL,
-                    headers: { 'Mime-Version' : '1.0', 'X-Priority' : '3', 'Content-type' : 'text/html; charset=iso-8859-1' },
-                    html   : text
+                    headers: { 'Mime-Version': '1.0', 'X-Priority': '3', 'Content-type': 'text/html; charset=iso-8859-1' },
+                    html: text
                 }, (err, info) => {
-                    if(err !== null) {
+                    if (err !== null) {
                         console.log(err);
                     }
                     else {
@@ -46,7 +51,7 @@ export const mailer = async function (title, obj) {
             }
         });
 
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
