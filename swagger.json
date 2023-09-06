@@ -283,7 +283,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Category-list"
+                  "$ref": "#/components/schemas/CategoryList"
                 }
               }
             }
@@ -641,7 +641,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Popular"
+                  "$ref": "#/components/schemas/Favorite"
                 }
               }
             }
@@ -942,7 +942,134 @@
 					}
 				}
 			}
+    },
+    "/glass": {
+      "get": {
+        "tags": ["Glass list"],
+        "summary": "returns a list of containers",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "sort",
+            "type": "string",
+            "description": "Ascending or descending sorting. Default: asc"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlassList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/subscribe/email": {
+      "post": {
+        "tags": ["Subscribe"],
+        "summary": "User`s submit subscription",
+        "parameters": [],
+        "requestBody": {
+          "description": "Subscription's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User already subscribed",
+            "content": {}
+          },
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email format",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/unsubscribe/{email}": {
+      "post": {
+        "tags": ["Subscribe"],
+        "summary": "User`s cancellation subscription",
+        "parameters": [
+          {
+						"in": "path",
+						"name": "email",
+						"required": true,
+						"type": "string",
+						"description": "User`s email"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email not found.",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
     }
+    
 
   },
   "components": {
@@ -1151,6 +1278,22 @@
           }
         }
       },
+      "CategoryList":{
+"type":"array",
+"example":[
+  "Beer",
+  "Cocktail",
+  "Cocoa",
+  "Coffee/Tea",
+  "Homemade Liqueur",
+  "Ordinary Drink",
+  "Other/Unknown",
+  "Punch/Party Drink",
+  "Shake",
+  "Shot",
+  "Soft Drink"
+]
+},
       "IngredientsList": {
 				"type": "array",
 				"items": {
@@ -1611,7 +1754,724 @@
 						}
 					]
 				}
-			}
+			},
+      "Search": {
+        "type": "object",
+        "properties": {
+          "totalHits": {
+            "type": "number",
+            "description": "Number of recipes",
+            "example": "0"
+          },
+          "page": {
+            "page": "number",
+            "description": "Page",
+            "example": "1"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Limit",
+            "example": "10"
+          },
+          "hits": {
+            "type": "array",
+            "description": "Found recipes",
+            "example": "[]"
+          }},
+				"example": {
+          "totalHits": 49,
+          "page": 1,
+          "limit": 10,
+          "hits": [
+              {
+                  "_id": "639b6de9ff77d221f190c56c",
+                  "drink": "Diesel",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Pint glass",
+                  "instructions": "Pour the lager first then add the blackcurrant cordial. Top up with the cider. The colour sholud be very dark approaching the colour of Guiness.",
+                  "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167149/cocktails-v1/drinks/Diesel.jpg",
+                  "ingredients": [
+                      {
+                          "_id": "64e764f3e968071c5369b95a",
+                          "title": "Lager",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager-Small.png",
+                          "measure": "1/2 pint "
+                      },
+                      {
+                          "_id": "64e764f3e968071c5369b963",
+                          "title": "Cider",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Cider.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Cider-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Cider-Small.png",
+                          "measure": "1/2 pint "
+                      },
+                      {
+                          "title": "Blackcurrant cordial",
+                          "measure": "1 dash "
+                      }
+                  ]
+              },
+              {
+                  "_id": "639b6de9ff77d221f190c50b",
+                  "drink": "Irish Russian",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Highball glass",
+                  "instructions": "Add the ingredients in the order listed in the recipe. Care must be taken when adding the Guinness to prevent an excess of foam. Do Not add ice.",
+                  "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167155/cocktails-v1/drinks/Irish_Russian.jpg",
+                  "ingredients": [
+                      {
+                          "_id": "64e764f3e968071c5369b91a",
+                          "title": "Vodka",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Vodka.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Vodka-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Vodka-Small.png",
+                          "measure": "1 shot "
+                      },
+                      {
+                          "_id": "64e764f3e968071c5369b91e",
+                          "title": "Kahlua",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Kahlua.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Kahlua-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Kahlua-Small.png",
+                          "measure": "1 shot "
+                      },
+                      {
+                          "title": "Coca-Cola",
+                          "measure": "1 dash "
+                      },
+                      {
+                          "title": "Guinness stout",
+                          "measure": "Fill with "
+                      }
+                  ]
+              },
+              {
+                  "_id": "64f28862a28862d3aeb7b105",
+                  "drink": "Carlsberg Corona",
+                  "about": null,
+                  "category": "Beer",
+                  "glass": "Beer Mug",
+                  "instructions": "drink iteqwewe qwqweweqwe qwewq",
+                  "drinkThumb": null,
+                  "ingredients": [
+                      {
+                          "title": "posh",
+                          "measure": "2 oz"
+                      }
+                  ],
+                  "users": [],
+                  "owner": "64f25c4a0717400196a3ff84",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "IBA": null,
+                  "alcoholic": null,
+                  "createdAt": "2023-09-02T00:57:06.070Z",
+                  "updatedAt": "2023-09-02T00:57:06.070Z"
+              },
+              {
+                  "_id": "64f287e0731c584a6613a05d",
+                  "drink": "Carlsberg",
+                  "about": null,
+                  "category": "Beer",
+                  "glass": "Beer Mug",
+                  "instructions": "drink iteqwewe qwqweweqwe qwewq",
+                  "drinkThumb": null,
+                  "ingredients": [
+                      {
+                          "title": "posh",
+                          "measure": "2 oz"
+                      }
+                  ],
+                  "users": [],
+                  "owner": "64f25c4a0717400196a3ff84",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "IBA": null,
+                  "alcoholic": null,
+                  "createdAt": "2023-09-02T00:54:56.014Z",
+                  "updatedAt": "2023-09-02T00:54:56.014Z"
+              },
+              {
+                  "_id": "639b6de9ff77d221f190c599",
+                  "drink": "Limona Corona",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Beer Glass",
+                  "instructions": "Open the Corona. Fill the empty space in the neck in the bottle with the rum. The bottle should be filled to the top. Plug the bottle with your thumb or the palm of your hand. Turn the bottle upside-down so the rum and beer mix. Turn the bottle rightside-up, unplug, and drink.",
+                  "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167155/cocktails-v1/drinks/Limona_Corona.jpg",
+                  "ingredients": [
+                      {
+                          "title": "Corona",
+                          "measure": "1 bottle "
+                      },
+                      {
+                          "title": "Bacardi Limon",
+                          "measure": "1 oz "
+                      }
+                  ]
+              },
+              {
+                  "_id": "639b6de9ff77d221f190c5c1",
+                  "drink": "Campari Beer",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Beer mug",
+                  "instructions": "Use a 15 oz glass. Add Campari first. Fill with beer.",
+                  "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167144/cocktails-v1/drinks/Campari_Beer.jpg",
+                  "ingredients": [
+                      {
+                          "_id": "64e764f3e968071c5369b95a",
+                          "title": "Lager",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager-Small.png",
+                          "measure": "1 bottle "
+                      },
+                      {
+                          "title": "Campari",
+                          "measure": "1 1/2 cl "
+                      }
+                  ]
+              },
+              {
+                  "_id": "639b6de9ff77d221f190c58e",
+                  "drink": "Lunch Box",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Pint glass",
+                  "instructions": "Fill a pint glass almost full with beer. Then fill the rest with orange juice (careful not to fill it to the top). Then take the shot of Amaretto and drop it in.",
+                  "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167155/cocktails-v1/drinks/Lunch_Box.jpg",
+                  "ingredients": [
+                      {
+                          "title": "Beer",
+                          "measure": "3/4 bottle "
+                      },
+                      {
+                          "_id": "64e764f3e968071c5369b914",
+                          "title": "Amaretto",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Amaretto.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Amaretto-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Amaretto-Small.png",
+                          "measure": "1 shot "
+                      },
+                      {
+                          "title": "Orange juice",
+                          "measure": "1 oz "
+                      }
+                  ]
+              },
+              {
+                  "_id": "639b6de9ff77d221f190c569",
+                  "drink": "110 in the shade",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Beer Glass",
+                  "instructions": "Drop shooter in glass. Fill with beer",
+                  "drinkThumb": "https://res.cloudinary.com/dec1shvoo/image/upload/v1689167144/cocktails-v1/drinks/110_in_the_shade.jpg",
+                  "ingredients": [
+                      {
+                          "_id": "64e764f3e968071c5369b95a",
+                          "title": "Lager",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Lager-Small.png",
+                          "measure": "16 oz "
+                      },
+                      {
+                          "_id": "64e764f3e968071c5369b919",
+                          "title": "Tequila",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169616/cocktails-v1/ingredient/Tequila.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169616/cocktails-v1/ingredient/Tequila-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169616/cocktails-v1/ingredient/Tequila-Small.png",
+                          "measure": "1.5 oz "
+                      }
+                  ]
+              },
+              {
+                  "_id": "639b6de9ff77d221f190c5f0",
+                  "drink": "Winter Rita",
+                  "drinkAlternate": null,
+                  "tags": "Winter",
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Highball Glass",
+                  "instructions": "Salt rim. Combine all ingredients, shake with ice, and strain over fresh ice.⠀",
+                  "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167165/cocktails-v1/drinks/Winter_Rita.jpg",
+                  "ingredients": [
+                      {
+                          "_id": "64e764f3e968071c5369b919",
+                          "title": "Tequila",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169616/cocktails-v1/ingredient/Tequila.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169616/cocktails-v1/ingredient/Tequila-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169616/cocktails-v1/ingredient/Tequila-Small.png",
+                          "measure": "1 2/3 oz"
+                      },
+                      {
+                          "title": "Campari",
+                          "measure": "1/4 oz"
+                      },
+                      {
+                          "_id": "64e764f3e968071c5369b922",
+                          "title": "Lime Juice",
+                          "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169610/cocktails-v1/ingredient/Lime%20juice.png",
+                          "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169610/cocktails-v1/ingredient/Lime%20juice-Medium.png",
+                          "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169610/cocktails-v1/ingredient/Lime%20juice-Small.png",
+                          "measure": "3/4 oz"
+                      },
+                      {
+                          "title": "Orange Juice",
+                          "measure": "1/2 oz"
+                      },
+                      {
+                          "title": "Rosemary Syrup",
+                          "measure": "1/2 oz"
+                      },
+                      {
+                          "title": "Salt",
+                          "measure": "Dash"
+                      }
+                  ]
+              },
+              {
+                  "_id": "639b6de9ff77d221f190c606",
+                  "drink": "Buccaneer",
+                  "drinkAlternate": null,
+                  "tags": null,
+                  "video": null,
+                  "category": "Beer",
+                  "IBA": null,
+                  "alcoholic": "Alcoholic",
+                  "glass": "Beer pilsner",
+                  "instructions": "Pour the corona into an 18oz beer glass pour the bacardi limon into the beer stir very gently",
+                  "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167149/cocktails-v1/drinks/Buccaneer.jpg",
+                  "ingredients": [
+                      {
+                          "title": "Corona",
+                          "measure": "1 "
+                      },
+                      {
+                          "title": "Bacardi Limon",
+                          "measure": "1 shot "
+                      }
+                  ]
+              }
+          ]
+      }
+			},
+      "Popular": {
+			
+        "type": "object",
+        "properties": {
+          "totalHits": {
+            "type": "number",
+            "description": "Number of recipes",
+            "example": "0"
+          },
+          "page": {
+            "page": "number",
+            "description": "Page",
+            "example": "1"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Limit",
+            "example": "10"
+          },
+          "hits": {
+            "type": "array",
+            "description": "Found recipes",
+            "example": "[]"
+          },
+          "thumb-small": {
+            "type": "string",
+            "description": "Image of ingredient small",
+            "example": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Sweet%20Vermouth-Small.png"
+          }
+        
+      },
+      "example":{
+        "totalHits": "0",
+        "page": "1",
+        "limit": "10",
+        "hits": [{
+          "_id": "639b6de9ff77d221f190c587",
+          "drink": "Vodka Martini",
+          "drinkAlternate": null,
+          "tags": null,
+          "video": null,
+          "category": "Ordinary Drink",
+          "IBA": null,
+          "alcoholic": "Alcoholic",
+          "glass": "Cocktail glass",
+          "instructions": "Shake the vodka and vermouth together with a number of ice cubes, strain into a cocktail glass, add the olive and serve.",
+          "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167161/cocktails-v1/drinks/Vodka_Martini.jpg",
+          "ingredients": [
+              {
+                  "_id": "64e764f3e968071c5369b91a",
+                  "title": "Vodka",
+                  "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Vodka.png",
+                  "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Vodka-Medium.png",
+                  "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Vodka-Small.png",
+                  "measure": "1 1/2 oz "
+              },
+              {
+                  "_id": "64e764f3e968071c5369b913",
+                  "title": "Dry Vermouth",
+                  "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Dry%20Vermouth.png",
+                  "thumb-medium": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Dry%20Vermouth-Medium.png",
+                  "thumb-small": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169605/cocktails-v1/ingredient/Dry%20Vermouth-Small.png",
+                  "measure": "3/4 oz "
+              },
+              {
+                  "title": "Olive",
+                  "measure": "1 "
+              }
+          ],
+          "updatedAt": "2023-09-04T21:34:48.997Z",
+          "users": [
+              "64f243e1130de1c37c498834"
+          ]
+      }]
+    }
+    },
+      "Favorite": {
+			
+					"type": "object",
+					"properties": {
+						"totalHits": {
+							"type": "number",
+							"description": "Number of recipes",
+							"example": "0"
+						},
+						"page": {
+							"page": "number",
+							"description": "Page",
+							"example": "1"
+						},
+						"limit": {
+							"type": "number",
+							"description": "Limit",
+							"example": "10"
+						},
+						"hits": {
+							"type": "array",
+							"description": "Found recipes",
+							"example": "[]"
+						},
+						"thumb-small": {
+							"type": "string",
+							"description": "Image of ingredient small",
+							"example": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Sweet%20Vermouth-Small.png"
+						}
+					
+				},
+        "example":{
+          "totalHits": "0",
+          "page": "1",
+          "limit": "10",
+          "hits": "[]"
+      }
+			},
+      "FavoriteById": {
+				"type": "object",
+				"properties": {
+					"isFavorite": {
+						"type": "boolean",
+						"description": "Category's id",
+						"example": false
+					}
+				},
+				"example": {
+					"isFavorite": false
+				}
+			},
+      "OwnAll": {
+        "type": "object",
+        "properties": {
+          "totalHits": {
+            "type": "number",
+            "description": "Number of recipes",
+            "example": "0"
+          },
+          "page": {
+            "page": "number",
+            "description": "Page",
+            "example": "1"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Limit",
+            "example": "10"
+          },
+          "hits": {
+            "type": "array",
+            "description": "Found recipes",
+            "example": "[]"
+          },
+          "thumb-small": {
+            "type": "string",
+            "description": "Image of ingredient small",
+            "example": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Sweet%20Vermouth-Small.png"
+          }
+        
+      },
+      "example":{
+        "totalHits": "0",
+        "page": "1",
+        "limit": "10",
+        "hits": "[]"
+    }
+    },
+    "GetOwnById":{
+      "type": "object",
+					"properties": {
+						"_id": {
+							"type": "string",
+							"description": "Ingredient's id",
+							"example": "64e9fa8d3c1392483f04d966"
+						},
+						"title": {
+							"type": "string",
+							"description": "Ingredient's name",
+							"example": "Highball glass"
+						},
+						"ingredientThumb": {
+							"type": "string",
+							"description": "Image of ingredient",
+							"example": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Sweet%20Vermouth.png"
+						},
+						"thumb-medium": {
+							"type": "string",
+							"description": "Image of ingredient medium",
+							"example": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Sweet%20Vermouth-Medium.png"
+						},
+						"thumb-small": {
+							"type": "string",
+							"description": "Image of ingredient small",
+							"example": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Sweet%20Vermouth-Small.png"
+						}
+					},
+          "example":{
+            "Cocoa": [
+              {
+                "_id": "639b6de9ff77d221f190c57b",
+                "drink": "Drinking Chocolate",
+                "description": "",
+                "category": "Cocoa",
+                "glass": "Coffee mug",
+                "instructions": [
+                  "Heat the cream and milk with the cinnamon and vanilla bean very slowly for 15-20 minutes. (If you don't have any beans add 1-2 tsp of vanilla after heating). Remove the bean and cinnamon. Add the chocolate. Mix until fully melted. Serve topped with some very dense fresh whipped cream. Serves 1-2 depending upon how much of a glutton you are. For a richer chocolate, use 4 oz of milk, 4 oz of cream, 4 oz of chocolate. Serve in coffee mug."
+                ],
+                "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167144/cocktails-v1/drinks/Drinking_Chocolate.jpg",
+                "ingredients": [
+                  {
+                    "title": "Heavy cream",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169606/cocktails-v1/ingredient/Heavy%20cream.png",
+                    "measure": "2 oz ",
+                    "_id": "64f0ce34989c1ff1b23c32dc"
+                  },
+                  {
+                    "title": "Milk",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169610/cocktails-v1/ingredient/Milk.png",
+                    "measure": "6-8 oz ",
+                    "_id": "64f0ce34989c1ff1b23c32dd"
+                  },
+                  {
+                    "title": "Cinnamon",
+                    "ingredientThumb": "",
+                    "measure": "1 stick ",
+                    "_id": "64f0ce34989c1ff1b23c32de"
+                  },
+                  {
+                    "title": "Vanilla",
+                    "ingredientThumb": "",
+                    "measure": "1 ",
+                    "_id": "64f0ce34989c1ff1b23c32df"
+                  },
+                  {
+                    "title": "Chocolate",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169604/cocktails-v1/ingredient/Chocolate.png",
+                    "measure": "2 oz finely chopped dark ",
+                    "_id": "64f0ce34989c1ff1b23c32e0"
+                  },
+                  {
+                    "title": "Whipped cream",
+                    "ingredientThumb": "",
+                    "measure": "Fresh ",
+                    "_id": "64f0ce34989c1ff1b23c32e1"
+                  }
+                ]
+              },
+              {
+                "_id": "639b6de9ff77d221f190c5cb",
+                "drink": "Chocolate Drink",
+                "description": "",
+                "category": "Cocoa",
+                "glass": "Coffee mug",
+                "instructions": [
+                  "Melt the bar in a small amount of boiling water. Add milk. Cook over low heat, whipping gently (with a whisk, i would assume) until heated well. Don't let it boil! Serve in coffee mug."
+                ],
+                "drinkThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689167144/cocktails-v1/drinks/Chocolate_Drink.jpg",
+                "ingredients": [
+                  {
+                    "title": "Chocolate",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169604/cocktails-v1/ingredient/Chocolate.png",
+                    "measure": "125 gr",
+                    "_id": "64f0ce34989c1ff1b23c3498"
+                  },
+                  {
+                    "title": "Milk",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169610/cocktails-v1/ingredient/Milk.png",
+                    "measure": "3/4 L ",
+                    "_id": "64f0ce34989c1ff1b23c3499"
+                  },
+                  {
+                    "title": "Water",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169615/cocktails-v1/ingredient/Water.png",
+                    "_id": "64f0ce34989c1ff1b23c349a"
+                  }
+                ]
+              },
+              {
+                "_id": "639b6de9ff77d221f190c5eb",
+                "drink": "Nuked Hot Chocolate",
+                "description": "",
+                "category": "Cocoa",
+                "glass": "Coffee mug",
+                "instructions": [
+                  "Mix with a bit of milk (1 oz or so) in coffee mug. Nuke mug for about 30-50 seconds. Stir until the heated cocoa dissolves. Fill mug with milk. Nuke for 1-2 minutes, depending on wattage and preferences as to burnt mouth parts."
+                ],
+                "drinkThumb": "https://storage.googleapis.com/cocktails-v1/drinks/Nuked_Hot_Chocolate/Nuked_Hot_Chocolate.jpg",
+                "ingredients": [
+                  {
+                    "title": "Cocoa powder",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169606/cocktails-v1/ingredient/Cocoa%20powder.png",
+                    "measure": "2 tsp ",
+                    "_id": "64f0ce34989c1ff1b23c349b"
+                  },
+                  {
+                    "title": "Sugar",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169611/cocktails-v1/ingredient/Sugar.png",
+                    "measure": "1 tsp ",
+                    "_id": "64f0ce34989c1ff1b23c349c"
+                  },
+                  {
+                    "title": "Vanilla extract",
+                    "ingredientThumb": "",
+                    "measure": "1/2 tsp ",
+                    "_id": "64f0ce34989c1ff1b23c349d"
+                  },
+                  {
+                    "title": "Milk",
+                    "ingredientThumb": "http://res.cloudinary.com/dec1shvoo/image/upload/v1689169610/cocktails-v1/ingredient/Milk.png",
+                    "measure": "12 oz ",
+                    "_id": "64f0ce34989c1ff1b23c349e"
+                  }
+                ]
+              }
+            ]
+          }
+    },
+    "GlassList":{
+      "type":"array",
+      "example":[
+        "Balloon Glass",
+        "Beer Glass",
+        "Beer mug",
+        "Beer pilsner",
+        "Brandy snifter",
+        "Champagne flute",
+        "Cocktail glass",
+        "Coffee mug",
+        "Collins glass",
+        "Copper Mug",
+        "Cordial glass",
+        "Coupe Glass",
+        "Highball glass",
+        "Hurricane glass",
+        "Irish coffee cup",
+        "Jar",
+        "Margarita glass",
+        "Margarita/Coupette glass",
+        "Martini Glass",
+        "Mason jar",
+        "Nick and Nora Glass",
+        "Old-fashioned glass",
+        "Parfait glass",
+        "Pint glass",
+        "Pitcher",
+        "Pousse cafe glass",
+        "Punch bowl",
+        "Shot glass",
+        "Whiskey Glass",
+        "Whiskey sour glass",
+        "White wine glass",
+        "Wine Glass"
+    ]
+      },
+      "SubscriptionRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          }
+        }
+      },
+      "SubscriptionResponse": {   
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Message that user has subscribed"
+            }
+        },
+        "example":"User has subscribed."
+      },
+      "UnSubscriptionResponse": {   
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message that user has unsubscribed"
+          }
+      },
+      "example":"Email deleted"
+    }
       
     },
     "securitySchemes": {
