@@ -54,7 +54,7 @@ const shape = {
       ({ path }) => `"${path}": ${aboutRecipe.message}`,
     ],
     maxLength: aboutRecipe.max,
-    default: null,
+    default: '',
   },
 
   category: {

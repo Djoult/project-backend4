@@ -7,6 +7,7 @@ import { isUserExists as _isUserExists } from './recipe/isUserExists.js';
 import { processDrinkThumb as processThumb } from './recipe/processDrinkThumb.js';
 import { removeDrinkThumbOnError as removeThumbOnError } from './recipe/removeDrinkThumbOnError.js';
 import { handleError } from '../decorators/handleError.js';
+import { parseBody as parse } from './recipe/parseBody.js';
 
 export { default as upload } from './upload.js';
 export const authenticate = ctrlWrapper(auth);
@@ -16,3 +17,4 @@ export const isValidId = ctrlWrapper(_isValidId);
 export const isUserExists = ctrlWrapper(_isUserExists);
 export const processDrinkThumb = ctrlWrapper(processThumb);
 export const removeDrinkThumbOnError = handleError(removeThumbOnError);
+export const parseBody = ctrlWrapper(parse);

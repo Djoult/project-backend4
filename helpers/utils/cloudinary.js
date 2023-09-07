@@ -26,8 +26,10 @@ const upload = async (
 
 const destroy = async (path, options = { invalidate: true }) => {
   // берем путь к файлу в качестве id
-  const [, thumbId] = path.match(REGEX_CLOUDINARY_PUBLIC_ID);
-  return await uploader.destroy(thumbId, options);
+  try {
+    const [, thumbId] = path.match(REGEX_CLOUDINARY_PUBLIC_ID);
+    return await uploader.destroy(thumbId, options);
+  } catch {}
 };
 
 export const cloud = {
