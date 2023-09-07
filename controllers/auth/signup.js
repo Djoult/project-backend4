@@ -6,7 +6,6 @@ import { nanoid } from 'nanoid';
 import { PASSWORD_MAX, PASSWORD_MIN } from '../../constants/misc.js';
 
 const signUp = async (req, res) => {
-  console.log('signUp');
   const { name, email, password } = req.body;
 
   const user = await User.findOne({ email });
