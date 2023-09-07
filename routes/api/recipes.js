@@ -2,7 +2,12 @@ import express from 'express';
 import { validateBody, uploadSingleImage } from '../../decorators/index.js';
 import { joiSchema as schema } from '../../schemas/recipes/index.js';
 import { ctrl } from '../../controllers/recipes/index.js';
-import { isRecipeExists, authenticate } from '../../middlewares/index.js';
+
+import {
+  isRecipeExists,
+  authenticate,
+  parseBody,
+} from '../../middlewares/index.js';
 
 import {
   isEmptyBody,
@@ -14,6 +19,25 @@ import {
 const router = express.Router();
 
 router.use(authenticate);
+
+/**
+ *
+ *******************************************************
+ * Добавление рецепта
+ *
+ * POST recipes/own
+ */
+router.post(
+  '/own',
+  uploadSingleImage('drinkThumb'),
+  parseBody,
+  isEmptyBody,
+  isRecipeExists,
+  //processDrinkThumb,
+  validateBody(schema.addRecipe),
+  ctrl.add,
+  removeDrinkThumbOnError
+);
 
 /**
  *
@@ -157,24 +181,6 @@ router.get('/favorite/:id', isValidId, ctrl.getFavoriteById);
  * { message: "Not Found" }(статус 404) - рецепт с таким id в избранных не найден
  */
 router.patch('/favorite/:id', isValidId, ctrl.updateFavoriteById);
-
-/**
- *
- *******************************************************
- * Добавление рецепта
- *
- * POST recipes/own
- */
-router.post(
-  '/own',
-  uploadSingleImage('drinkThumb'),
-  isEmptyBody,
-  isRecipeExists,
-  processDrinkThumb,
-  validateBody(schema.addRecipe),
-  ctrl.add,
-  removeDrinkThumbOnError
-);
 
 /**
  *

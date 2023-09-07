@@ -49,7 +49,7 @@ const shape = {
   about: Joi.string()
     .pattern(aboutRecipe.pattern)
     .max(aboutRecipe.max)
-    .default(null)
+    .default('')
     .messages({ '*': `{{#label}}: ${aboutRecipe.message}` }),
 
   category: Joi.string()
