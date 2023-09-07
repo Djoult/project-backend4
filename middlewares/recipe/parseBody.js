@@ -1,9 +1,9 @@
 export const parseBody = async ({ body }, res, next) => {
   Object.keys(body).forEach(key => {
-    body[key] = JSON.parse(body[key]);
+    try {
+      body[key] = JSON.parse(body[key]);
+    } catch {}
   });
-
-  console.log(body);
 
   next();
 };
