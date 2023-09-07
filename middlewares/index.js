@@ -16,5 +16,5 @@ export const isRecipeExists = ctrlWrapper(_isRecipeExists);
 export const isValidId = ctrlWrapper(_isValidId);
 export const isUserExists = ctrlWrapper(_isUserExists);
 export const processDrinkThumb = ctrlWrapper(processThumb);
-export const removeDrinkThumbOnError = handleError(removeThumbOnError);
+export const removeDrinkThumbOnError = removeThumbOnError; //handleError(removeThumbOnError);
 export const parseBody = ctrlWrapper(parse);

@@ -7,9 +7,7 @@ export const validateBody = schema => {
   return async (req, res, next) => {
     try {
       if (Joi.isSchema(schema)) {
-        // сохраняем валидные поля для работы с ними в контроллере
-        // (при частичном обновлении)
-        req.validatedBody = await schema.validateAsync(req.body);
+        schema.validate(req.body);
       }
       next();
     } catch (err) {

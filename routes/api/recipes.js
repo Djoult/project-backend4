@@ -1,5 +1,9 @@
 import express from 'express';
-import { validateBody, uploadSingleImage } from '../../decorators/index.js';
+import {
+  validateBody,
+  uploadSingleImage,
+  uploadImage,
+} from '../../decorators/index.js';
 import { joiSchema as schema } from '../../schemas/recipes/index.js';
 import { ctrl } from '../../controllers/recipes/index.js';
 
@@ -30,10 +34,10 @@ router.use(authenticate);
 router.post(
   '/own',
   uploadSingleImage('drinkThumb'),
-  parseBody,
   isEmptyBody,
+  parseBody,
   isRecipeExists,
-  //processDrinkThumb,
+  processDrinkThumb,
   validateBody(schema.addRecipe),
   ctrl.add,
   removeDrinkThumbOnError
